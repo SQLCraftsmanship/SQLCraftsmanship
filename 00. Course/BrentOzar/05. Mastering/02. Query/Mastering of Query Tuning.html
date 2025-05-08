@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Brent Ozar Course Notes</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="brent-ozar-course-notes">Brent Ozar Course Notes</h1>
+<style>
+r { color: red }
+o { color: Orange }
+g { color: Green }
+lg { color: lightgreen }
+b { color: Blue }
+lb { color: lightblue }
+</style>
+<pre><code class="language-sql"></code></pre>
+<ul>
+<li>
+<p>Initial Training Page</p>
+<p><a href="https://training.brentozar.com/courses/">https://training.brentozar.com/courses/</a></p>
+</li>
+</ul>
+<hr>
+<h1 id="1-mastering-index-tuning">1. Mastering Index tuning</h1>
+<ul>
+<li>Index
+<ul>
+<li><a href="#Process-of-Restore-the-DB">Process of Restore the DB</a></li>
+<li><a href="#Introduction-D.E.A.T.H.-Method">Introduction D.E.A.T.H. Method</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="process-of-restore-the-db">Process of Restore the DB</h1>
+<p>Labs 1, 2, &amp; 3 use the same SQL:</p>
+<ol>
+<li>If you’ve been playing around adding/dropping indexes, restore your StackOverflow database</li>
+<li>Copy &amp; run the setup script for Lab 1</li>
+<li>Start SQLQueryStress:</li>
+<li>File Explorer, \Labs, double-click SQLQueryStress.exe</li>
+<li>Click File, Open, \Labs\IndexLab1.json</li>
+<li>Click Go</li>
+</ol>
+<h1 id="how-sql-server-builds-query-plans">How SQL Server Builds Query Plans</h1>
+<p>We explain query plan architecture and execution using an analogy of a home buyer, architect, builder, and supply store. We cover trivial query optimization, full optimization, and timeouts.</p>
+<h2 id="how-sql-server-builds-query-plans-1">How SQL Server Builds Query Plans</h2>
+<p>We can compared how the SQL Server builds the query plan with an arhitect. Check the below image:</p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ArchitectPlanComparition.png" alt="alt text"></p>
+<p>Some notes:</p>
+<ul>
+<li>The more specific you are about your needs the better bluprint you will get</li>
+<li>The architect create the blueprint base on what he knew at the time</li>
+<li>The builder doesn't have the right to tell the architect, &quot;Hey, this plan is makes no sense give my supplies&quot;</li>
+<li>The supply store doesn't know anything about your bluprints</li>
+</ul>
+<ul>
+<li>
+<p>Trivial Plans</p>
+<pre><code class="language-sql"><span class="hljs-comment">/* Start with SQL Server&#x27;s out-of-the-box defaults: */</span>
+<span class="hljs-keyword">EXEC</span> sys.sp_configure N<span class="hljs-string">&#x27;cost threshold for parallelism&#x27;</span>, N<span class="hljs-string">&#x27;5&#x27;</span>
+GO
+<span class="hljs-keyword">EXEC</span> sys.sp_configure N<span class="hljs-string">&#x27;max degree of parallelism&#x27;</span>, N<span class="hljs-string">&#x27;0&#x27;</span>
+GO
+RECONFIGURE <span class="hljs-keyword">WITH</span> OVERRIDE
+GO
+
+<span class="hljs-comment">/* Clear out our indexes, and start with just clustered indexes: */</span>
+USE StackOverflow;
+GO
+<span class="hljs-keyword">EXEC</span> DropIndexes;
+GO
+DBCC FREEPROCCACHE;
+GO
+<span class="hljs-keyword">SET</span> STATISTICS <span class="hljs-type">TIME</span>, IO <span class="hljs-keyword">ON</span>;
+GO
+</code></pre>
+<ul>
+<li>Ask the architect to build a plan</li>
+</ul>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">50</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> dbo.Users
+<span class="hljs-keyword">WHERE</span> Reputation <span class="hljs-operator">=</span> <span class="hljs-number">2</span>;
+GO
+</code></pre>
+<p>Notes</p>
+<ul>
+<li>
+<p>He built the plan fast, less than 1 milliseconds</p>
+</li>
+<li>
+<p>if you check the Optimization Level you can see &quot;TRIVIAL&quot;.
+the Query optimizer said, this query is so trivially easy that I don't have to put much wor into building a bluprint</p>
+</li>
+<li>
+<p>Optimization Level</p>
+<ul>
+<li>
+<p>Trivial optimization</p>
+<ul>
+<li>
+<p>No parallelism</p>
+</li>
+<li>
+<p>No missing index request</p>
+</li>
+<li>
+<p>But TRIVIAL queries are usually so simple it doesn't matter and they are not your biggest bottleneck. However, they can be when:</p>
+<ul>
+<li>You have a seemingly easy query</li>
+<li>But isn't run thousands of times per second</li>
+<li>It really desperately needs an index</li>
+<li>But SQL Server isn't asking for one</li>
+</ul>
+<p>To know hoy many times a query runs execute:</p>
+<pre><code class="language-sql">sp_BlitzCache
+  <span class="hljs-variable">@SortOrder</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;executions&#x27;</span>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>Full Optimization</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">50</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> dbo.Users
+<span class="hljs-keyword">WHERE</span> Reputation <span class="hljs-operator">=</span> <span class="hljs-number">2</span>
+  <span class="hljs-keyword">AND</span> Location <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;San Diego&#x27;</span>;
+GO
+</code></pre>
+<p>This is more selective but the builder will need to scan through more stuff at the store to find them
+<img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan1.png" alt="alt text"></p>
+<p>The architect has lots of tricks</p>
+<ul>
+<li>Rewriting your join order.</li>
+<li>Condidering different indexes</li>
+<li>Using objects you didn't ask for like indexed views, computed columns.</li>
+<li>Eliminating joins using foreing keys &amp; contraints</li>
+<li>Rewriting UNION, UNION ALL</li>
+</ul>
+<p>The Architect is just guessing the builder's costs solely for the purpose of designing better blueprints.
+THE COST ISN'T REPORTED BY THE BUILDER.</p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\Costs1.png" alt="alt text"></p>
+<p>Full optimization (that isn't really full)</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> u1.<span class="hljs-operator">*</span> 
+<span class="hljs-keyword">FROM</span> dbo.Users u1
+<span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Users u2 <span class="hljs-keyword">ON</span> u2.Id <span class="hljs-operator">=</span> u1.Id
+<span class="hljs-keyword">WHERE</span> u1.Reputation <span class="hljs-operator">=</span> <span class="hljs-number">-1</span>;
+GO
+</code></pre>
+<p>No users match Reputation = -1 so this query will run fast.
+the query polay is simple
+optimization Level is Full
+Reason For Early Termination .... = GOOD ENOUGH PLAN FOUND
+If we change the query and added more JOINs. The architect create the plan quicly but the Reason For Early Termination
+is a time out. the architect starte to do a full optimization but at some point, it gave up. It ran out of time.</p>
+<ul>
+<li>Full, but existing early for a good reason</li>
+<li>Full, but existing early for a bad reason (timeout)</li>
+<li>Full, after extensive evaluations</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\OptimizationLevels.png" alt="alt text"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Here are the real takeaways
+The architect (the query optimizar) builds a plan</p>
+<ul>
+<li>Starting with what you ask for</li>
+<li>Tries a few revisions witht what he knows about the builder and his supply store</li>
+<li>He can run ot of time</li>
+<li>He doesn't know how successful the builder was</li>
+<li>The bluprint keeps getting used, regardless</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="when-the-architect-gets-an-early-estimate-wrong">When the Architect Gets an Early Estimate Wrong</h2>
+<p>In fudamentals of Query Tuning, we talked about how if you are unhappy with a query's performance, read the plan from right to left, top to bottom, looking for the place where estimates versus actual went to hell in handbasket. Now, let's dig deeper into how estimates are created, and how they go wrong.</p>
+<p>In this session, I'll explain the two kinds of estimates: early estimates driven by your query's filters, and late estimates driven by joins. Then we'll talk through how early estimates go wrong, and how you can fix them.</p>
+<ul>
+<li>
+<p>Reminder from Fundamentals
+When you are unhappy with a query's performance:</p>
+<ul>
+<li>run the query, get the actual plan</li>
+<li>Read the plan</li>
+<li>On each operator, check the ESTIMATED vs ACTUAL rows.
+<r>If they are 10x high or low, find out why, fix it!!</r></li>
+</ul>
+</li>
+<li>
+<p>2 kinds of estimation</p>
+<ul>
+<li>
+<p><r>EARLY</r></p>
+<ul>
+<li>Your query has a filter (WHERE)</li>
+<li>SQL Server use statistics to guess how many rows match the filter</li>
+<li>GENERALLY SPEAKING, executed first in the query plan</li>
+</ul>
+</li>
+<li>
+<p><r>LATE</r></p>
+<ul>
+<li>Your query joins to other tables</li>
+<li>There is no direct filter on those tables</li>
+<li>GENERALLY SPEAKING, based on dentiy vectors, averages</li>
+<li>If early estimates are wrong, these are screwed</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-sql">USE [StackOverflow]
+GO
+<span class="hljs-keyword">SET</span> STATISTICS IO <span class="hljs-keyword">ON</span>;
+GO
+<span class="hljs-comment">/* Set up indexes before class */</span>
+IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Users&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Location_DisplayName&#x27;</span>)
+  <span class="hljs-keyword">CREATE</span> INDEX Location_DisplayName <span class="hljs-keyword">ON</span> dbo.Users(Location, DisplayName);a
+IF <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;IX_OwnerUserId&#x27;</span>)
+  <span class="hljs-keyword">EXEC</span> sp_rename N<span class="hljs-string">&#x27;dbo.Posts.IX_OwnerUserId&#x27;</span>, N<span class="hljs-string">&#x27;OwnerUserId&#x27;</span>, <span class="hljs-string">&#x27;INDEX&#x27;</span>;
+IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;OwnerUserId&#x27;</span>)
+  <span class="hljs-keyword">CREATE</span> INDEX OwnerUserId <span class="hljs-keyword">ON</span> dbo.Posts(OwnerUserId);
+IF <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;_dta_index_Posts_5_85575343__K8&#x27;</span>)
+  <span class="hljs-keyword">EXEC</span> sp_rename N<span class="hljs-string">&#x27;dbo.Posts._dta_index_Posts_5_85575343__K8&#x27;</span>, N<span class="hljs-string">&#x27;CreationDate&#x27;</span>, <span class="hljs-string">&#x27;INDEX&#x27;</span>;
+IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;CreationDate&#x27;</span>)
+  <span class="hljs-keyword">CREATE</span> INDEX CreationDate <span class="hljs-keyword">ON</span> dbo.Posts(CreationDate);
+GO
+
+<span class="hljs-comment">/* Turn on actual execution plans: */</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC dbo.usp_SearchPostsByLocation 
+  <span class="hljs-variable">@Location</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">AS</span>
+
+  <span class="hljs-comment">/* Find the most recent posts from an area */</span>
+  <span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+    <span class="hljs-keyword">FROM</span> dbo.Users u
+    <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId <span class="hljs-comment">-- THIS IS THE LATE </span>
+    <span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">=</span> <span class="hljs-variable">@Location</span>  <span class="hljs-comment">-- THIS IS THE EARLY</span>
+    <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> p.CreationDate <span class="hljs-keyword">DESC</span>;
+GO
+</code></pre>
+</li>
+<li>
+<p>Digging into a query</p>
+</li>
+</ul>
+<pre><code class="language-sql">USE [StackOverflow]
+GO
+  <span class="hljs-comment">/* Find the most recent posts from an area */</span>
+<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+<span class="hljs-keyword">FROM</span> dbo.Users u
+<span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId <span class="hljs-comment">-- THIS IS THE LATE </span>
+<span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">=</span> <span class="hljs-variable">@Location</span>  <span class="hljs-comment">-- THIS IS THE EARLY</span>
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> p.CreationDate <span class="hljs-keyword">DESC</span>;
+GO
+</code></pre>
+<p>This query has just two estimations:</p>
+<ul>
+<li>Early: how many users will match?</li>
+<li>Late : how many posts did the users write?</li>
+</ul>
+<pre><code class="language-sql"><span class="hljs-comment">/* Let&#x27;s try one that is PRETTY GOOD */</span>
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Near Stonehenge&#x27;</span>
+GO
+
+<span class="hljs-comment">/* See what we&#x27;re working with: */</span>
+DBCC SHOW_STATISTICS(<span class="hljs-string">&#x27;dbo.Users&#x27;</span>, <span class="hljs-string">&#x27;Location_DisplayName&#x27;</span>);
+GO
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan2.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ShowStats1.png" alt="alt text"></p>
+<p>Bucket #124: Location &gt; 'Nairobi' and &lt;= 'Netherlands' so Near Stonehenge is in this bucket</p>
+<p>RANGE_ROWS = tere are 13,268 rows in this bucket</p>
+<p>DISTINCT_RANGE_ROWS =  there are 1,456 unique Locations in this bucket</p>
+<p>AVG_RANGE_ROWS = for any given Location in this range, theree are 9.112639 users with that location</p>
+<p>But what happends if your query is obfuscated ....</p>
+<pre><code class="language-sql"><span class="hljs-comment">/* Obfuscate the filter: */</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC dbo.usp_SearchPostsByLocation 
+	<span class="hljs-variable">@Location</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">AS</span>
+
+	<span class="hljs-comment">/* Find the most recent posts from an area */</span>
+	<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+	  <span class="hljs-keyword">FROM</span> dbo.Users u
+	  <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId
+	  <span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">=</span> <span class="hljs-built_in">UPPER</span>(LTRIM(RTRIM(<span class="hljs-variable">@Location</span>)))
+	  <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> p.CreationDate <span class="hljs-keyword">DESC</span>;
+GO
+
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Near Stonehenge&#x27;</span>
+GO
+
+<span class="hljs-comment">/* That estimate comes from the density vector: */</span>
+DBCC SHOW_STATISTICS(<span class="hljs-string">&#x27;dbo.Users&#x27;</span>, <span class="hljs-string">&#x27;Location_DisplayName&#x27;</span>);
+GO
+<span class="hljs-keyword">SELECT</span> <span class="hljs-number">7.240553E-06</span> <span class="hljs-operator">*</span> <span class="hljs-number">8917507</span>
+GO
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan3.png" alt="alt text"></p>
+<ul>
+<li>Early estimation error sources (in order)
+<ul>
+<li>
+<p>WHERE clause that isn't easy to understand</p>
+<ul>
+<li>Keep the WHERE clause simple
+<ul>
+<li>Try no use System functions(string, math, etc)</li>
+<li>Try no use User-defined functions(scalar, TVFs)</li>
+<li>fetching data from configuration tables</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Data size grew to the point where 201 buckets wasn't enough</p>
+<pre><code class="language-sql"><span class="hljs-comment">/* Go back to the &quot;good&quot; WHERE clause: */</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC dbo.usp_SearchPostsByLocation 
+  <span class="hljs-variable">@Location</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">AS</span>
+
+  <span class="hljs-comment">/* Find the most recent posts from an area */</span>
+  <span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+    <span class="hljs-keyword">FROM</span> dbo.Users u
+    <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId
+    <span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">=</span> <span class="hljs-variable">@Location</span>
+    <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> p.CreationDate <span class="hljs-keyword">DESC</span>;
+GO
+
+<span class="hljs-comment">/* Try a slightly larger location: */</span>
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Nepal&#x27;</span>
+GO
+
+<span class="hljs-comment">/* Explain off-histogram steps */</span>
+DBCC SHOW_STATISTICS(<span class="hljs-string">&#x27;dbo.Users&#x27;</span>, <span class="hljs-string">&#x27;Location_DisplayName&#x27;</span>)
+GO
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan4.png" alt="alt text"></p>
+<p>Nepal is &gt; Nairobi and &lt; Netherlands
+Nepal is in the same bucket as near Stonehenge
+Nepal is not big enough to get its own bucket
+It gets the 9.112638 AVG_RANGE_ROW estimate</p>
+<p><r>How can we fix this? WE CAN'T</r>
+OPTION RECOMPILE, is not going to solve this
+Update statistics, changing sampling rates, is not going to solve this
+Filtered statistics on Nepal, is not going to solve this
+Changing compatibility levels, is not going to solve this</p>
+<p><r>Can't we get more buckets on SQL. Yes we can on PostgreSQL / Oracle</r></p>
+</li>
+<li>
+<p>Statistics done with really low sampling rates
+When we create the IX the SQL has to read the entire table so it read the 100% sampling.
+But if whe update stats later the sql use a sampli of 2% of the table. This is a dandom number.
+This is not better or worse just different. Some time for some queries the 100% sample is better for others the 2% can be better, etc</p>
+<ul>
+<li>How to tell in our query's case this happend:
+<ul>
+<li>Check the number of rows that the histogram would show as the estimate</li>
+<li>Check the number of rows that actually exist</li>
+<li><r>If Rows Sample is less than, say 10% of Rows consider updateing statistics with fullscan</r></li>
+<li>Check the plan again to see if the estaimate is now right</li>
+</ul>
+</li>
+</ul>
+<p><r>You can persist sample rates using PERSIST_SAMPLE_PERCENT = ON</r></p>
+</li>
+<li>
+<p>Statistics out of dates
+SQL Server automatically updates stats when avouabout 20% of the data in the table changes.</p>
+<p>Example of when this actually hurt:</p>
+<ul>
+<li>Small configuration table with a list of 1,000 stores (columns Id, ConuntryCode, StoreName)</li>
+<li>Company grew, added 100 stores in a new country</li>
+<li>Stats weren't updated: it was a tiny table and 100 rows wasn't a big percentage of 1,000 rows</li>
+<li>But WHERE CountryCode = 'NewCountry' ran SQL Server only estimated 1 row was there</li>
+</ul>
+<p>To fix this use Ola H. maintenance solution in a regular way.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><r>I WOULD LIKE TO EXECUTE THE QUERY YSING INDA TO SEE HOW THE EXECUTION PLAN CHANGE AND THE SQL EXECUTE FIRST THE dbo.Post SELECT</r></p>
+<pre><code class="language-sql"><span class="hljs-comment">/* That estimate comes from the density vector: */</span>
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;India&#x27;</span>
+GO
+</code></pre>
+<h2 id="recap">RECAP</h2>
+<ul>
+<li>Early estimates
+<ul>
+<li>Your query has a filter ()WHERE</li>
+<li>SQL Server uses statistics to guess how many rows will match the filter</li>
+<li>Usually driven by the WHERE clause</li>
+<li>Usually based on statistics on tables</li>
+<li>Usually executed first in the query plan</li>
+</ul>
+</li>
+<li>Early estimation error sources (in order):
+<ul>
+<li>WHERE clause that isn't easy to understand</li>
+<li>Outlier filter values hit the 201 buckets problem</li>
+<li>Statisitcs done with really low sampling rates</li>
+<li>Statisitcs our of date</li>
+</ul>
+</li>
+</ul>
+<h2 id="when-the-architect-gets-a-later-estimate-wrong">When the Architect Gets a Later Estimate Wrong</h2>
+<pre><code class="language-sql">USE [StackOverflow]
+GO
+<span class="hljs-keyword">SET</span> STATISTICS IO <span class="hljs-keyword">ON</span>;
+GO
+<span class="hljs-comment">/* Set up indexes before class */</span>
+IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Users&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Location_DisplayName&#x27;</span>)
+	<span class="hljs-keyword">CREATE</span> INDEX Location_DisplayName <span class="hljs-keyword">ON</span> dbo.Users(Location, DisplayName);a
+IF <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;IX_OwnerUserId&#x27;</span>)
+	<span class="hljs-keyword">EXEC</span> sp_rename N<span class="hljs-string">&#x27;dbo.Posts.IX_OwnerUserId&#x27;</span>, N<span class="hljs-string">&#x27;OwnerUserId&#x27;</span>, <span class="hljs-string">&#x27;INDEX&#x27;</span>;
+IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;OwnerUserId&#x27;</span>)
+	<span class="hljs-keyword">CREATE</span> INDEX OwnerUserId <span class="hljs-keyword">ON</span> dbo.Posts(OwnerUserId);
+IF <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;_dta_index_Posts_5_85575343__K8&#x27;</span>)
+	<span class="hljs-keyword">EXEC</span> sp_rename N<span class="hljs-string">&#x27;dbo.Posts._dta_index_Posts_5_85575343__K8&#x27;</span>, N<span class="hljs-string">&#x27;CreationDate&#x27;</span>, <span class="hljs-string">&#x27;INDEX&#x27;</span>;
+IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.indexes <span class="hljs-keyword">WHERE</span> object_id <span class="hljs-operator">=</span> OBJECT_ID(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>) <span class="hljs-keyword">AND</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;CreationDate&#x27;</span>)
+	<span class="hljs-keyword">CREATE</span> INDEX CreationDate <span class="hljs-keyword">ON</span> dbo.Posts(CreationDate);
+GO
+
+<span class="hljs-comment">/* Turn on actual execution plans: */</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC dbo.usp_SearchPostsByLocation 
+	<span class="hljs-variable">@Location</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">AS</span>
+
+	<span class="hljs-comment">/* Find the most recent posts from an area */</span>
+	<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+	  <span class="hljs-keyword">FROM</span> dbo.Users u
+	  <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId
+	  <span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">=</span> <span class="hljs-variable">@Location</span>
+	  <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> p.CreationDate <span class="hljs-keyword">DESC</span>;
+GO
+</code></pre>
+<pre><code class="language-sql"><span class="hljs-comment">/* Make sure we don&#x27;t have the 2% stats
+from the last module: */</span>
+<span class="hljs-keyword">UPDATE</span> STATISTICS dbo.Users <span class="hljs-keyword">WITH</span> FULLSCAN;
+
+<span class="hljs-comment">/* Go back to Stonehenge: */</span>
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Near Stonehenge&#x27;</span>
+GO
+<span class="hljs-comment">/* SQL Server is estimating a fixed number of rows
+will return per Posts index seek. */</span>
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan5.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan5Detail.png" alt="alt text"></p>
+<p>1 User = 10.644 Posts</p>
+<ul>
+<li>That is an AVG</li>
+<li>SQL doesn't know which users live in which locations</li>
+<li>It'sjust making one guess for any location</li>
+<li>To prove it, let's try another location in another stats bucket</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan6.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan6Detail.png" alt="alt text"></p>
+<pre><code class="language-sql"><span class="hljs-comment">/* Is the estimate tied to one location?
+What if we try a different location? */</span>
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Iceland&#x27;</span>
+GO
+
+<span class="hljs-comment">/* Where&#x27;s that estimate coming from? */</span>
+DBCC SHOW_STATISTICS(<span class="hljs-string">&#x27;dbo.Posts&#x27;</span>, <span class="hljs-string">&#x27;OwnerUserId&#x27;</span>);
+<span class="hljs-keyword">SELECT</span> <span class="hljs-number">2.615199E-07</span> <span class="hljs-operator">*</span> <span class="hljs-number">40700647</span>;
+</code></pre>
+<ul>
+<li>How late estimates go wrong
+<ul>
+<li>SQL Server makes a bad early estimate, OR</li>
+<li>The early estimate is accurate, but Posts has outliers:
+<ul>
+<li>Not a lot of people live Near Stonehenge, but they write a LOT of Posts</li>
+<li>Or a whole lot of people live Near Stonhenge but they hardly write any Posts ar all</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-sql"><span class="hljs-comment">/* Look for outliers where few people live,
+but they write a whole lot of Posts: */</span>
+<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">100</span> u.Location, 
+	(<span class="hljs-built_in">SUM</span>(<span class="hljs-number">1</span>) <span class="hljs-operator">/</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-keyword">DISTINCT</span> u.Id)) <span class="hljs-keyword">AS</span> PostsPerUser,
+	<span class="hljs-built_in">COUNT</span>(<span class="hljs-keyword">DISTINCT</span> u.Id) <span class="hljs-keyword">AS</span> Residents, <span class="hljs-built_in">SUM</span>(<span class="hljs-number">1</span>) <span class="hljs-keyword">AS</span> TotalPosts
+<span class="hljs-keyword">FROM</span> dbo.Users u
+<span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> u.Location
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> (<span class="hljs-built_in">SUM</span>(<span class="hljs-number">1</span>) <span class="hljs-operator">/</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-keyword">DISTINCT</span> u.Id)) <span class="hljs-keyword">DESC</span>;
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan7.png" alt="alt text"></p>
+<ul>
+<li>
+<p>And we can’t fix that.
+There are 2 phases to querying:</p>
+<ul>
+<li>The architect (query optimizer) designs a query plan, then</li>
+<li>The builder (query processor) executes the plan</li>
+</ul>
+<p>By the time we start executing, it’s too late: we can’t fix later estimates.</p>
+</li>
+</ul>
+<p>The problem we’re up against
+Early estimation error sources:</p>
+<ol>
+<li>WHERE clause obfuscation</li>
+<li>201 bucket problem</li>
+<li>Statistics with low sampling rates</li>
+<li>Statistics out of date
+Late estimation error sources:</li>
+<li>Early estimation errors</li>
+<li>Outlier values during joins</li>
+</ol>
+<p>We have two options</p>
+<ul>
+<li>Either fix the root cause of the bad estimate (the right way, but can be hard, time-consuming) OR</li>
+<li>Mitigate the effects:
+<ul>
+<li>Break the query up into two parts, and go back to the architect (query optimizer) after the first part is done, so it knows how many rows are really involved And very often, the second one is easier.</li>
+</ul>
+</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan8.png" alt="alt text"></p>
+<ul>
+<li>The X-Acto Knife Technique
+<ul>
+<li>Read the plan right to left, top to bottom</li>
+<li>Find the place where estimates vs actual suddenly went &gt;10X high or &gt;10X low</li>
+<li>Break the query up into two parts:
+<ul>
+<li>Phase 1 runs, insert into temp table</li>
+<li>Phase 2 runs, SQL Server builds stats on the temp table, understands how many rows came out of Phase 1</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan9.png" alt="alt text"></p>
+<pre><code class="language-sql"><span class="hljs-comment">/* New hotness: */</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC dbo.usp_SearchPostsByLocation 
+	<span class="hljs-variable">@Location</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">BEGIN</span>
+	<span class="hljs-keyword">SELECT</span> Id, DisplayName
+		<span class="hljs-keyword">INTO</span> #Users
+		<span class="hljs-keyword">FROM</span> dbo.Users
+		<span class="hljs-keyword">WHERE</span> Location <span class="hljs-operator">=</span> <span class="hljs-variable">@Location</span>;
+
+	<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+	  <span class="hljs-keyword">FROM</span> #Users u
+	  <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId
+	  <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> p.CreationDate;
+<span class="hljs-keyword">END</span>
+GO
+
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Forest of Dean, United Kingdom&#x27;</span>
+GO
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan10.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan11.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan12.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan13.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan14.png" alt="alt text"></p>
+<ul>
+<li>Fix one problem, find another
+Problem #1: SQL Server didn’t know that a prolific user lived in Forest of Dean
+Problem #2: even when SQL Server knew the UserId, that Id still didn’t have his own bucket, so we hit the 201 buckets problem</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan15.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan16.png" alt="alt text"></p>
+<pre><code class="language-sql"><span class="hljs-comment">/* New line: */</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC dbo.usp_SearchPostsByLocation 
+	<span class="hljs-variable">@Location</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">BEGIN</span>
+	<span class="hljs-keyword">SELECT</span> u.DisplayName, p.Title, p.Id, p.CreationDate
+	  <span class="hljs-keyword">INTO</span> #RowsIWant
+	  <span class="hljs-keyword">FROM</span> dbo.Users u
+	  <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Posts p <span class="hljs-keyword">ON</span> u.Id <span class="hljs-operator">=</span> p.OwnerUserId
+	  <span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">=</span> <span class="hljs-variable">@Location</span>;
+
+	<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">200</span> DisplayName, Title, Id, CreationDate
+	<span class="hljs-keyword">FROM</span> #RowsIWant
+	<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> CreationDate <span class="hljs-keyword">DESC</span>;
+<span class="hljs-keyword">END</span>
+GO
+
+DBCC FREEPROCCACHE;
+<span class="hljs-keyword">EXEC</span> dbo.usp_SearchPostsByLocation N<span class="hljs-string">&#x27;Forest of Dean, United Kingdom&#x27;</span>
+GO
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan17.png" alt="alt text"></p>
+<ul>
+<li>
+<p>Here, this is overkill
+This query ran in under a second anyway.
+The idea is to teach you the techniques quickly.
+Ideally, best to worst:</p>
+<ol>
+<li>Get the early estimates right</li>
+<li>You’ll only be left with later estimate issues</li>
+<li>Mitigate those with the X-Acto knife technique</li>
+<li>Even when you do that, you can still hit edge case issues like the 201 buckets problem</li>
+</ol>
+</li>
+<li>
+<p>There’s a catch.</p>
+<ul>
+<li>Temp tables are reused across sessions.</li>
+<li>You can inherit someone else’s stats, even if you drop the temp tables.</li>
+<li>Learn more in the temp tables module in Fundamentals of TempDB.</li>
+<li>For now, think of this technique as OPTION (RANDOM RECOMPILE)</li>
+</ul>
+</li>
+<li>
+<p>Mini-Module: When the Architect Gets Everything Right, But It’s Still Slow
+“My estimates are all close!” 3 possible fixes:</p>
+<ul>
+<li>Add or tune indexes so there’s less work to do (we cover that in Mastering Index Tuning)</li>
+<li>Reorder operations in the query</li>
+<li>Add hardware (we cover that in Mastering Server Tuning)</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">ALTER</span> PROC fbo.usp_TopVotersInCity <span class="hljs-variable">@location</span> NVARCHAR(<span class="hljs-number">40</span>) <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">BEGIN</span>
+  <span class="hljs-keyword">SELECT</span> UserId, <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">AS</span> TotalVotes
+    <span class="hljs-keyword">INTO</span> #TopVoters
+  <span class="hljs-keyword">FROM</span> dbo.Votes v <span class="hljs-comment">-- Scan all the votes</span>
+  <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> v.UserId
+  <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">DESC</span>;
+
+  <span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">100</span> tv.TotalVotes, u.DisplayName, u.Location
+  <span class="hljs-keyword">FROM</span> #TopVoters
+  <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> dbo.Users u <span class="hljs-keyword">ON</span> tv.UserId <span class="hljs-operator">-</span> u.Id
+  <span class="hljs-keyword">WHERE</span> u.Location <span class="hljs-operator">-</span> <span class="hljs-variable">@Location</span> <span class="hljs-comment">-- Do some filtering</span>
+  <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> u.DisplayName
+<span class="hljs-keyword">END</span>
+</code></pre>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan18.png" alt="alt text"></p>
+<p><r>IF THE ESTIMATES ARE PRETTU CLOSE ... TRY CAMPING THE PARTS TOGETHER</r></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\QueryCTE.png" alt="alt text"></p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\ExecutionPlan19.png" alt="alt text"></p>
+<ul>
+<li>CTEs are great when...
+<ul>
+<li>You have a long query to tune (like a proc)</li>
+<li>You’re not sure which parts should be done first</li>
+<li>When the row estimates for each query look fine</li>
+</ul>
+</li>
+</ul>
+<p>Change temp tables &amp; child procs into CTEs, let SQL Server reorder the processing, and see if it goes faster.</p>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\TempVsCTE.png" alt="alt text"></p>
+<h1 id="lab-1">LAB 1</h1>
+<ul>
+<li>Restart SQL Server</li>
+<li>Restore the StackOverflow db</li>
+<li>Copy and run the setup script for this lab from <a href="http://BrentOzar.com/go.querylab1">BrentOzar.com/go.querylab1</a></li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\Lab1_1.png" alt="alt text"></p>
+<ul>
+<li>
+<p>Anti-patterns for this lab
+These queries have cardinality estimation issues. It’s not just from joins this time – there are a large number of different things that can affect the quality of SQL Server’s cardinality estimation. In some cases, they affect performance. (A lot.)</p>
+</li>
+<li>
+<p>Your assignment
+Improve the cardinality estimation.
+It’s tempting to jump in and say, “I’ll just index everything and make the queries faster.” And indexes are (usually) a good answer.
+But here, before you add indexes, understand the problem you’re working on.</p>
+</li>
+<li>
+<p>It’s hard to see a finish line.
+In the real world, users never say, “Get this query to have 500 logical reads or less, and perform in 50ms or less.”
+However, they do ask for faster/better. Here, though, we’re focusing on better cardinality estimation.</p>
+</li>
+<li>
+<p>How I’d budget these 2 hours
+5  minutes – poke around: read a few of the mqt_Lab1% procs, pick the first one you want to focus on tuning.
+25 minutes – tune 1 query: run it, get the actual plan (if possible), change the query/indexes/stats, get the new actual plan (if possible), paste it at <a href="http://PasteThePlan.com">PasteThePlan.com</a>. Turn in your homework in Slack.
+Repeat, tackling one other query, 1 hour total. (Don’t spend 60 minutes on one query – tackle others.)
+60 minutes – lunch.</p>
+</li>
+</ul>
+<h1 id="lab-1-my-solution">LAB 1 My solution</h1>
+<ul>
+<li>
+<p>Anti-patterns for this lab</p>
+<ul>
+<li>
+<p>[dbo].[mqt_Lab1_Q3160]</p>
+<pre><code class="language-sql"><span class="hljs-comment">/* NOTES 
+
+  - COMPATIBILITY LEVEL 140
+  - [dbo].[mqt_Lab1_Q3160] is a PROC to get the comparition between your and Jons answer. If your score is greather than Jobs you win if not you lose or tie.
+  - [dbo].[mqt_Lab1_Q466] most controvertial post in the site
+  - [dbo].[mqt_Lab1_Q975] Users with more than one duplicate account and a more that 1000 reputation in aggregate. A list of users that have duplicate accounts 
+              on site, based on the EmailHash and lots of reputation is riding on it
+  - dbo.mqt_Lab1_Report_UsersByQuestion_ByDisplayName
+  - [dbo].[mqt_Lab1_Level1] newer users with more reputation than me 
+*/</span>
+
+<span class="hljs-keyword">SET</span> STATISTICS IO, <span class="hljs-type">TIME</span> <span class="hljs-keyword">ON</span>
+
+<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">20</span> OwnerUserId, <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>)
+<span class="hljs-keyword">FROM</span> dbo.Posts
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> OwnerUserId
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">DESC</span>
+
+<span class="hljs-number">0</span>		    <span class="hljs-number">403093</span>
+<span class="hljs-number">1144035</span>	<span class="hljs-number">45150</span>
+<span class="hljs-number">22656</span>	  <span class="hljs-number">34202</span>
+<span class="hljs-number">29407</span>	  <span class="hljs-number">21531</span>
+<span class="hljs-number">548225</span>	<span class="hljs-number">21179</span>
+<span class="hljs-number">115145</span>	<span class="hljs-number">20694</span>
+<span class="hljs-number">6309</span>	  <span class="hljs-number">19461</span>
+<span class="hljs-number">100297</span>	<span class="hljs-number">18553</span>
+<span class="hljs-number">19068</span>	  <span class="hljs-number">17943</span>
+<span class="hljs-number">1491895</span>	<span class="hljs-number">17934</span>
+
+
+<span class="hljs-comment">/* SP [dbo].[mqt_Lab1_Q3160] @UserId INT = 26837 */</span>
+<span class="hljs-keyword">EXEC</span> [dbo].[mqt_Lab1_Q3160] <span class="hljs-number">26837</span>
+    <span class="hljs-comment">/* Analysis
+    Result		   = 1 Row
+    Execution Time = 7 min 44 sec
+            CPU time =  4764 ms,  elapsed time =  12816 ms
+            CPU time = 39232 ms,  elapsed time = 451320 ms.
+            CPU time = 43996 ms,  elapsed time = 464137 ms.
+    Execution IO   = Table &#x27;Posts&#x27;. Scan count 34, logical reads 22468718, physical reads 14 (read-ahead reads 22177738).
+    General 
+      Run in Paralel --&gt; This is Okay
+      Missing Index  --&gt; Post(OwnerUserId) INCLUDE(ParentId, Score)
+      Estimation	   --&gt; Are okay for all but not on the [Merge Join] stimate 1 of 618.678
+    Table dbo.Posts
+      - Doesn&#x27;t have Indexes only the PK */</span>
+</code></pre>
+<p>![alt text](Images/Lab/1/EXEC [dbo].[mqt_Lab1_Q3160] 26837.png)</p>
+<pre><code class="language-sql"><span class="hljs-keyword">EXEC</span> [dbo].[mqt_Lab1_Q3160] <span class="hljs-number">1144035</span>
+
+    <span class="hljs-comment">/* Analysis
+    Result		   = 1 Row
+    Execution Time = 7 min 0 sec
+      CPU time = 38343 ms,  elapsed time = 427578 ms.
+      CPU time = 38358 ms,  elapsed time = 427582 ms.
+    Execution IO   = Table &#x27;Posts&#x27;. Scan count 34, logical reads 22468718, physical reads 14 (read-ahead reads 22177738).
+                    Table &#x27;Posts&#x27;. Scan count 34, logical reads 22469320, physical reads 2  (read-ahead reads 22328171)
+    General 
+      Run in Paralel --&gt; This is Okay
+      Missing Index  --&gt; Post(OwnerUserId) INCLUDE(ParentId, Score)
+      Estimation	   --&gt; Are okay for all but not on the [Merge Join] stimate 1 of 618.678
+    Table dbo.Posts
+      - Doesn&#x27;t have Indexes only the PK	*/</span>
+</code></pre>
+<p>![alt text](Images/Lab/1/EXEC [dbo].[mqt_Lab1_Q3160] 1144035.png)</p>
+<p>Questions</p>
+<ul>
+<li>
+<p>Why the Merge Join estimate only 1 of 618.678
+If I check the statistics I can see that for value 26837 there isn't a bucket. It's between 781 and 232689 RANGE
+<img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\Lab\1\SHOWSTATSFor26837.png" alt="alt text"></p>
+<p>It's the same for value 1144035</p>
+</li>
+</ul>
+<p>Solution for [dbo].[mqt_Lab1_Q3160]</p>
+<ul>
+<li>Create index</li>
+</ul>
+<pre><code class="language-sql">  <span class="hljs-keyword">CREATE</span> INDEX ix_OwnerUserId_PostTypeId_ParentId
+    <span class="hljs-keyword">ON</span> dbo.Posts (OwnerUserId, PostTypeId, ParentId)
+</code></pre>
+</li>
+<li>
+<p>[dbo].[mqt_Lab1_Q466]</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SET</span> STATISTICS IO, <span class="hljs-type">TIME</span> <span class="hljs-keyword">ON</span>
+<span class="hljs-keyword">EXEC</span> [dbo].[mqt_Lab1_Q466]
+    <span class="hljs-comment">/* Analysis
+    Result		   = 100 Row
+    Execution Time = 26 min
+          CPU time = 2391 ms, elapsed time = 2391 ms.
+    Execution IO   = Table &#x27;#BC81E2F2&#x27;. Scan count 0, logical reads 28925523.
+                     Table &#x27;Votes&#x27;. Scan count 1, logical reads 694245, physical reads 4, read-ahead reads 694108.
+          CPU time = 111797 ms,  elapsed time = 232624 ms.
+                     Table &#x27;Posts&#x27;. Scan count 0, logical reads 24905608, physical reads 5438752.
+                     Table &#x27;#BC81E2F2&#x27;. Scan count 1, logical reads 74937, physical reads 5352, read-ahead reads 39128.
+          CPU time =  54297 ms, elapsed time = 1328142 ms.
+          CPU time = 169779 ms, elapsed time = 1563158 ms.
+
+    General 
+    */</span>
+</code></pre>
+<p>Questions</p>
+<ul>
+<li>On the first part of the query:
+<ul>
+<li>Why the Merge Join estimate only 1.3 millon of 28 mill</li>
+</ul>
+</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\Lab\1\ExecutionPlan_mqt_Lab1_Q466.png" alt="alt text"></p>
+<ul>
+<li>On the second part of the query:
+<ul>
+<li>The variable table brougth 6.2 million but estimate only 1</li>
+<li>And the Clustred Index Seek on dbo.Posts brogth 2.2 million but estimate only 1</li>
+</ul>
+</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\Course\BrentOzar\05. Mastering\01. Query\Images\Lab\1\ExecutionPlan_mqt_Lab1_Q466_2.png" alt="alt text"></p>
+<h2 id="solution-for-dbomqt_lab1_q466">Solution for [dbo].[mqt_Lab1_Q466]</h2>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="lab-1-brent-solution">LAB 1 Brent solution</h1>
+<pre><code class="language-sql"></code></pre>
+
+            
+            
+        </body>
+        </html>

@@ -1,0 +1,34 @@
+
+How to structure a project on Python
+
+    Logical solution
+        1. Have a plan
+            1.1 What's my Backend Look like
+            1.2 What's my Frontend look like
+            1.3 What database I am going to use
+            1.4 What OS I am going to use
+            1.5 General components I will need
+            1.6 Create a Github
+
+    Physical solution
+        1. Use module and package
+        2. Organize the import. In big projects it's important
+        1. One file per classe
+            1.1 Name of the folder in lower case
+            1.2 Name of the file in UpperCase
+        2. Have a folder with name [backend]
+        3. Have a folder with name [frontend]
+             3.1 Create [src] folder
+                3.1.1 Create [screens] folder and separate in folders
+                3.1.2 Create [tests] folder
+             3.2 Create [assets] folder
+                3.2.1 Create [gifs] folder
+                3.2.2 Create [images] folder
+        4. Have a folder with name [db]
+        5. Have a folder with name [libs]
+            5.1 Create a helper folder and a [helper.py] file with information about each function
+        5. README file
+
+Some Ref
+    https://www.youtube.com/watch?v=e9yMYdnSlUA&list=WL&index=16
+    https://www.youtube.com/watch?v=CAeWjoP525M&list=WL&index=17
