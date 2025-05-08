@@ -1,0 +1,11 @@
+2022-01-19 12:38:07.9307 1 Debug .cctor - Changing the log level from Not Specified to Info for console
+2022-01-19 12:38:07.9675 1 Info .cctor - Create connection string.
+2022-01-19 12:38:07.9826 1 Info .cctor - Set connection string Data Source=(local);Integrated Security=True;Application Name="SQL Server Checkup" (Password removed).
+2022-01-19 12:38:07.9826 1 Debug .cctor - The server name is: 'LAP0595'.
+2022-01-19 12:38:07.9826 1 Info .cctor - Test SQLServer connectivity
+2022-01-19 12:38:08.0334 1 Debug .cctor - Testing SQL connectivity
+2022-01-19 12:38:22.7235 1 Fatal .cctor - SQL connectivity failed
+2022-01-19 12:38:27.7395 1 Info .cctor - Total elapsed time: 0:19.76
+2022-01-19 12:38:27.7395 1 Error .cctor - Sorry, we couldn't connect to this server. Check the server name, port, username, and password and try again.
+2022-01-19 12:38:27.7395 1 Error .cctor - For more information visit this link: https://SQLServerCheckup.com
+2022-01-19 12:38:27.7475 1 Info .cctor - Copy log into output directory.

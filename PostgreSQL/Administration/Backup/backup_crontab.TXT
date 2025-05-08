@@ -1,0 +1,4 @@
+30 5 * * * docker exec -t postgres-test_postgres_1 pg_dump -U postgres concursar > /home/operador/postgres_dump/concursar_dump_$(date +\%Y-\%m-\%d__\%H_\%M_\%S).sql
+33 5 * * * docker exec -t postgres-test_postgres_1 pg_dump -U postgres -O -x concursar > /home/operador/postgres_dump/concursar_dump_sin_owner_ni_roles$(date +\%Y-\%m-\%d__\%H_\%M_\%S).sql
+40 5 * * * docker exec -t postgres-test_postgres_1 pg_dump -U postgres -c -C concursar > /home/operador/postgres_dump/concursar_dump_borra_base_y_crea_base_con_datos$(date +\%Y-\%m-\%d__\%H_\%M_\%S).sql
+25 5 * * * docker exec -t postgres-test_postgres_1 pg_dumpall -U postgres -c > /home/operador/postgres_dump/dump_all_completa_borra_todo_y_crea_desde_cero_$(date +\%Y-\%m-\%d__\%H_\%M_\%S).sql

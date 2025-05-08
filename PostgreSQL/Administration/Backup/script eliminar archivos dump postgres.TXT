@@ -1,0 +1,1 @@
+45 6 1 * * find /home/operador/postgres_dump/* -mtime +15 -type f -delete

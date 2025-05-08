@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Handles and Hashes</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="handles-and-hashes">Handles and Hashes</h1>
+<style>
+r { color: red }
+o { color: Orange }
+g { color: Green }
+lg { color: lightgreen }
+b { color: Blue }
+lb { color: lightblue }
+</style>
+<hr>
+<ul>
+<li>Index
+<ul>
+<li><a href="#Intro">Intro</a></li>
+<li><a href="#CHAPTER#I">CHAPTER I</a>
+<ul>
+<li><a href="#History">History</a></li>
+</ul>
+</li>
+<li><a href="#DMVs#and#DMFs">DMVs and DMFs</a></li>
+<li><a href="#DMVs">DMVs</a></li>
+<li><a href="#DMFs">DMFs</a></li>
+<li><a href="Handles#and#Hashes#columns#per#DMVs#and#DMFs">Handles and Hashes columns per DMVs and DMFs</a></li>
+<li><a href="Difference#between#Handles#and#Hashes">Difference between Handles and Hashes</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>
+<p>Intro</p>
+<p>As a Database Administrator (DBA) in SQL Server performance tuning, you have to go through some key concepts that are essential for monitoring and optimizing SQL Server queries, some of them are: Query Hash, Query Plan Hash, SQL Handle, and Plan Handle. These components are crucial for diagnosing performance issues, tracking query execution, and managing query plans effectively.</p>
+<p>In these set of articles we are going develop the concep and more about this components.</p>
+</li>
+<li>
+<p>Reference</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Ref.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DMV</td>
+<td>Dynamic Management View</td>
+</tr>
+<tr>
+<td>DMF</td>
+<td>Dynamic Management Function</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chapter-i">CHAPTER I</h2>
+<ul>
+<li>
+<p>History</p>
+<p>When discussing about SQL Server performance and plan management, undesrtanding the concepts (Handles and Hashes) along with their associated DMVs (Dynamic Management Views) and DMFs (Dynamic Management Funcitons) help databse administrators analyze and manage query execution plans, which are critical for maintaining optimal SQL Server performance.</p>
+<ul>
+<li>
+<p>The SQL Handle and Plan Handle
+Are concepts that have been present since SQL Server 2000 with the introduction of query execution and plan caching. It has been an essential part of SQL Server's plan cache architecture, enabling the server to manage and reuse query plans effectively.</p>
+</li>
+<li>
+<p>The Query Hash and Query Plan Hash
+Were introduced in SQL Server 2008 as part of the enhancements to the query execution statistics and plan caching mechanisms. This was a significant step forward in performance troubleshooting as it allowed DBAs to group and analyze similar queries and plans more efficiently.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Table of SQL Versions and Hashes and Handles</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>SQL 2000</th>
+<th>SQL 2005</th>
+<th>SQL 2008</th>
+<th>SQL 2012 and +</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First version of SQL Handle and Plan Handle<br>SQL Server started to cache execution plans<br>and reuse them</td>
+<td>Expanded the plan cache with additional DMVs like<br>sys.dm_exec_query_stats and sys.dm_exec_requests<br>providing better visibility.</td>
+<td>Introduced Query Hash and Query Plan Hash,<br>greatly improving the ability to group and<br>analyze similar queries.</td>
+<td>These concepts have been refined, with<br>additional improvements in plan management<br>visibility into the plan cache advanced features like the Query Store (SQL  2016).</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>DMVs and DMFs</p>
+<p>Before SQL Server 2008, determining the cumulative cost of queries running on a server was challenging. The only reliable method involved capturing a Profiler trace during a representative time period. While trace-based query cost analysis is effective, it has significant drawbacks.</p>
+<p>In SQL Server 2008, the SQL Server database engine has a powerful new feature that generates an identifier for each query. The identifier is independent of any inline parameter values. This identifier – sometimes called a “query fingerprint” – enables a fairly robust method of identifying the queries on your server based on DMVs/DMFs.</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> 
+    ObjectName
+    , TypeDesc
+    , <span class="hljs-keyword">CASE</span> <span class="hljs-keyword">WHEN</span> [sql_handle]  <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">THEN</span> <span class="hljs-string">&#x27;No&#x27;</span> <span class="hljs-keyword">ELSE</span> <span class="hljs-string">&#x27;Yes&#x27;</span> <span class="hljs-keyword">END</span> <span class="hljs-keyword">AS</span> [SQL_Handle]
+    , <span class="hljs-keyword">CASE</span> <span class="hljs-keyword">WHEN</span> [plan_handle] <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">THEN</span> <span class="hljs-string">&#x27;No&#x27;</span> <span class="hljs-keyword">ELSE</span> <span class="hljs-string">&#x27;Yes&#x27;</span> <span class="hljs-keyword">END</span> <span class="hljs-keyword">AS</span> [Plan_Handle]
+    , <span class="hljs-keyword">CASE</span> <span class="hljs-keyword">WHEN</span> [query_hash]  <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">THEN</span> <span class="hljs-string">&#x27;No&#x27;</span> <span class="hljs-keyword">ELSE</span> <span class="hljs-string">&#x27;Yes&#x27;</span> <span class="hljs-keyword">END</span> <span class="hljs-keyword">AS</span> [Query_Hash]
+    , <span class="hljs-keyword">CASE</span> <span class="hljs-keyword">WHEN</span> [query_plan_hash] <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">THEN</span> <span class="hljs-string">&#x27;No&#x27;</span> <span class="hljs-keyword">ELSE</span> <span class="hljs-string">&#x27;Yes&#x27;</span> <span class="hljs-keyword">END</span> <span class="hljs-keyword">AS</span> [Query_Plan_Hash]
+<span class="hljs-keyword">FROM</span>
+(
+    <span class="hljs-keyword">SELECT</span> 
+        so.name		 <span class="hljs-keyword">AS</span> ObjectName, 
+        so.type_desc <span class="hljs-keyword">AS</span> TypeDesc  , 
+        sc.name      <span class="hljs-keyword">AS</span> ColumnName
+    <span class="hljs-keyword">FROM</span> sys.system_columns <span class="hljs-keyword">AS</span> sc
+    <span class="hljs-keyword">JOIN</span> sys.system_objects <span class="hljs-keyword">AS</span> so 
+    <span class="hljs-keyword">ON</span>   so.object_id <span class="hljs-operator">=</span> sc.object_id
+    <span class="hljs-keyword">JOIN</span> sys.types <span class="hljs-keyword">AS</span> t
+    <span class="hljs-keyword">ON</span>   t.system_type_id <span class="hljs-operator">=</span> sc.system_type_id
+    <span class="hljs-keyword">AND</span>  t.user_type_id   <span class="hljs-operator">=</span> sc.user_type_id
+    <span class="hljs-keyword">WHERE</span> sc.name <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;sql_handle&#x27;</span>, <span class="hljs-string">&#x27;plan_handle&#x27;</span>, <span class="hljs-string">&#x27;query_hash&#x27;</span>, <span class="hljs-string">&#x27;query_plan_hash&#x27;</span>)
+) <span class="hljs-keyword">AS</span> SourceTable
+PIVOT
+(
+    <span class="hljs-built_in">MAX</span>(ColumnName)
+    <span class="hljs-keyword">FOR</span> ColumnName <span class="hljs-keyword">IN</span> ([SQL_Handle], [Plan_Handle], [Query_Hash], [Query_Plan_Hash])
+) <span class="hljs-keyword">AS</span> PivotTable
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> ObjectName;
+</code></pre>
+<p>To fully appreciate query fingerprints’, you first must understand the DMVs and DMFs that were introduce in SQL 2005:</p>
+<ul>
+<li>[sys].[dm_exec_requests]</li>
+<li>[sys].[dm_exec_sql_text()]</li>
+<li>[sys].[dm_exec_plan_attributes()]</li>
+<li>[sys].[dm_exec_query_plan()]</li>
+<li>[sys].[dm_exec_cached_plans]</li>
+<li>[sys].[dm_exec_query_stats]</li>
+<li>[sys].[dm_exec_sessions]</li>
+</ul>
+<p><img src="file:///c:\Perso\GitHub\LiberatoriLucas\RDMS\SQL\OnPremise\SQL SERVER\Scripts\Performance\Handles and Hashes\image.png" alt="alt text">    <img src="file:///c:\Perso\GitHub\LiberatoriLucas\RDMS\SQL\OnPremise\SQL SERVER\Scripts\Performance\Handles and Hashes\image-1.png" alt="alt text"></p>
+</li>
+<li>
+<p>DMVs</p>
+<ul>
+<li>
+<p>[sys].[dm_exec_requests]</p>
+<p>Description
+Returns information about each request that is executing in SQL Server.</p>
+<p>Columns</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>DefinitionDescription</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sql_handle</td>
+<td>varbinary(64)</td>
+<td>Is a token that uniquely identifies the batch or stored procedure that the query is part of. Nullable.</td>
+</tr>
+<tr>
+<td>plan_handle</td>
+<td>varbinary(64)</td>
+<td>Is a token that uniquely identifies a query execution plan for a batch that is currently executing. + Nullable.</td>
+</tr>
+<tr>
+<td>query_hash</td>
+<td>binary(8)</td>
+<td>Binary hash value calculated on the query and used to identify queries with similar logic. You can + use the query hash to determine the aggregate resource usage for queries that differ only by literal values.</td>
+</tr>
+<tr>
+<td>query_plan_hash</td>
+<td>binary(8)</td>
+<td>Binary hash value calculated on the query execution plan and used to identify similar query execution + plans. You can use query plan hash to find the cumulative cost of queries with similar execution plans.</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>[sys].[dm_exec_cached_plans]
+Description
+Returns a row for each query plan that is cached by SQL Server for faster query execution. You can use this dynamic management view to find cached query plans, cached query text, the amount of memory taken by cached plans, and the reuse count of the cached plans.</p>
+<p>Columns</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>DefinitionDescription</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>plan_handle</td>
+<td>varbinary(64)</td>
+<td>Identifier for the in-memory plan. This identifier is transient and remains constant only while the + plan remains in the cache. This value may be used with the following dynamic management functions: sys.dm_exec_sql_text, +</td>
+</tr>
+<tr>
+<td>sys.dm_exec_query_plan, and sys.dm_exec_plan_attributes</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>[sys].[dm_exec_query_stats]</p>
+<p>Description
+Returns aggregate performance statistics for cached query plans in SQL Server. The view contains one row per query statement within the cached plan, and the lifetime of the rows are tied to the plan itself. When a plan is removed from the cache, the corresponding rows are eliminated from this view.</p>
+<table>
+<thead>
+<tr>
+<th>Column name</th>
+<th>data Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sql_handle</td>
+<td>varbinary(64)</td>
+<td>Is a token that uniquely identifies the batch or stored procedure that the query is part of.</td>
+</tr>
+</tbody>
+</table>
+<pre><code>                        sql_handle, together with statement_start_offset and statement_end_offset, can be used to retrieve the SQL text of the query by calling the sys.dm_exec_sql_text dynamic management function.|
+</code></pre>
+<p>|plan_handle  |	varbinary(64) |	Is a token that uniquely identifies a query execution plan for a batch that has executed and its
+plan  resides in the plan cache, or is currently executing. This value can be passed to the sys.dm_exec_query_plan dynamic management function to obtain the query plan.|
+Will always be 0x000 when a natively compiled stored procedure queries a memory-optimized table.
+|query_hash	  | binary(8)	  | Binary hash value calculated on the query and used to identify queries with similar logic. You can use
+the query hash to determine the aggregate resource usage for queries that differ only by literal values.|
+|query_plan_hash| binary(8)	  | Binary hash value calculated on the query execution plan and used to identify similar query execution
+plans. You can use query plan hash to find the cumulative cost of queries with similar execution plans. Will always be 0x000 when a natively compiled stored procedure queries a memory-optimized table.|</p>
+</li>
+</ul>
+</li>
+<li>
+<p>DMFs</p>
+<ul>
+<li>
+<p>[sys].[dm_exec_sql_text()]</p>
+<p>Description
+Returns the text of the SQL batch that is identified by the specified sql_handle. This table-valued function replaces the system function fn_get_sql.</p>
+<p>Syntax
+sys.dm_exec_sql_text(sql_handle | plan_handle)</p>
+<p>Arguments
+sql_handle
+Is a token that uniquely identifies a batch that has executed or is currently executing. sql_handle is varbinary(64).
+The sql_handle can be obtained from the following dynamic management objects: sys.dm_exec_query_stats, sys.dm_exec_requests,
+sys.dm_exec_cursors, sys.dm_exec_xml_handles, sys.dm_exec_query_memory_grants, sys.dm_exec_connections</p>
+<p>plan_handle
+Is a token that uniquely identifies a query execution plan for a batch that has executed and its plan resides in the plan cache, or is currently executing. plan_handle is varbinary(64).
+The plan_handle can be obtained from the following dynamic management objects: sys.dm_exec_cached_plans, sys.dm_exec_query_stats,
+sys.dm_exec_requests, sys.dm_exec_procedure_stats, sys.dm_exec_trigger_stats.</p>
+<p>Columns</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>DefinitionDescription</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>nvarchar(max)</td>
+<td>Text of the SQL query. Is NULL for encrypted objects.</td>
+</tr>
+</tbody>
+</table>
+<p>Notes
+For ad hoc queries, the SQL handles are hash values based on the SQL text being submitted to the server, and can originate from any database.
+For database objects such as stored procedures, triggers or functions, the SQL handles are derived from the database ID, object ID, and object number.
+Plan handle is a hash value derived from the compiled plan of the entire batch.</p>
+</li>
+<li>
+<p>[sys].[dm_exec_plan_attributes()]</p>
+<p>Description
+Returns one row per plan attribute for the plan specified by the plan handle. You can use this table-valued function to get details about a particular plan, such as the cache key values or the number of current simultaneous executions of the plan.</p>
+<p>Syntax
+sys.dm_exec_plan_attributes ( plan_handle )</p>
+<p>Arguments
+plan_handle
+Uniquely identifies a query plan for a batch that has executed and whose plan resides in the plan cache. The plan handle can be obtained from the sys.dm_exec_cached_plans dynamic management view.</p>
+<p>Columns</p>
+<table>
+<thead>
+<tr>
+<th>Column name</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attribute</td>
+<td>varchar(128)</td>
+<td>Name of the attribute associated with this plan. (#1)</td>
+</tr>
+<tr>
+<td>value</td>
+<td>sql_variant</td>
+<td>Value of the attribute that is associated with this plan.</td>
+</tr>
+<tr>
+<td>is_cache_key</td>
+<td>bit</td>
+<td>Indicates whether the attribute is used as part of the cache lookup key for the plan.</td>
+</tr>
+</tbody>
+</table>
+<p>(#1)
+The possible attributes, their data types, and their descriptions can by the:
+sql_handle varbinary(64)	The SQL handle for the batch.</p>
+<p>Notes
+Copies of the same compiled plan might differ only by the value in the set_options column.
+For more information check the corresponding page.</p>
+</li>
+<li>
+<p>[sys].[dm_exec_query_plan()]</p>
+<p>Description
+Returns the Showplan in XML format for the batch specified by the plan handle. The plan specified by the plan handle can either be cached or currently executing.</p>
+<p>Syntax
+sys.dm_exec_query_plan(plan_handle)</p>
+<p>Arguments
+plan_handle
+Is a token that uniquely identifies a query execution plan for a batch that has executed and its plan resides in the plan cache, or is currently executing. The plan_handle can be obtained from the following dynamic management objects: sys.dm_exec_cached_plans, sys.dm_exec_query_stats, sys.dm_exec_requests, sys.dm_exec_procedure_stats, sys.dm_exec_trigger_stats.</p>
+<p>Columns</p>
+<table>
+<thead>
+<tr>
+<th>Column name</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>query_plan</td>
+<td>XML</td>
+<td>Contains the compile-time Showplan representation of the query execution plan that is specified with + plan_handle. The Showplan is in XML format. One plan is generated for each batch that contains, for example ad hoc Transact-SQL + statements, stored procedure calls, and user-defined function calls. Column is nullable.</td>
+</tr>
+</tbody>
+</table>
+<p>Notes
+Under the following conditions, no Showplan output is returned in the query_plan column of the returned table for sys.dm_exec_query_plan:</p>
+<ol>
+<li>
+<p>If the query plan that is specified by using plan_handle has been evicted from the plan cache, the query_plan column of the returned table is null. For example, this condition may occur if there is a time delay between when the plan handle was captured and when it was used with sys.dm_exec_query_plan.</p>
+</li>
+<li>
+<p>Some Transact-SQL statements are not cached, such as bulk operation statements or statements containing string literals larger than 8 KB in size. XML Showplans for such statements cannot be retrieved by using sys.dm_exec_query_plan unless the batch is currently executing because they do not exist in the cache.</p>
+</li>
+<li>
+<p>If a Transact-SQL batch or stored procedure contains a call to a user-defined function or a call to dynamic SQL, for example using EXEC (string), the compiled XML Showplan for the user-defined function is not included in the table returned by sys.dm_exec_query_plan for the batch or stored procedure. Instead, you must make a separate call to sys.dm_exec_query_plan for the plan handle that corresponds to the user-defined function.</p>
+</li>
+<li>
+<p>When an ad hoc query uses simple or forced parameterization, the query_plan column will contain only the statement text and not the actual query plan. To return the query plan, call sys.dm_exec_query_plan for the plan handle of the prepared parameterized query. You can determine whether the query was parameterized by referencing the sql column of the sys.syscacheobjects view or the text column of the sys.dm_exec_sql_text dynamic management view.</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Handles and Hashes columns per DMVs and DMFs</p>
+<table>
+<thead>
+<tr>
+<th>DMV name</th>
+<th>DMF Name</th>
+<th>Column contain</th>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[sys].[dm_exec_requests]</td>
+<td>X</td>
+<td>sql_handle / plan_handle / +</td>
+<td></td>
+</tr>
+<tr>
+<td>query_hash / query_plan_hash</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>X</td>
+<td>[sys].[dm_exec_sql_text()]</td>
+<td>text</td>
+<td>sql_handle / plan_handle</td>
+</tr>
+<tr>
+<td>X</td>
+<td>[sys].[dm_exec_plan_attributes()]</td>
+<td>attribute</td>
+<td>plan_handle</td>
+</tr>
+<tr>
+<td>X</td>
+<td>[sys].[dm_exec_query_plan()]</td>
+<td>query_plan</td>
+<td>plan_handle</td>
+</tr>
+<tr>
+<td>[sys].[dm_exec_cached_plans]</td>
+<td>X</td>
+<td>plan_handle</td>
+<td></td>
+</tr>
+<tr>
+<td>[sys].[dm_exec_query_stats]</td>
+<td>X</td>
+<td>sql_handle / plan_handle / +</td>
+<td></td>
+</tr>
+<tr>
+<td>query_hash / query_plan_hash</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Difference between Handles and Hashes</p>
+<table>
+<thead>
+<tr>
+<th>Columna Name</th>
+<th>Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQL Handle</td>
+<td>Hash of the SQL Text containing all of your formatting (casing, spaces, etc).</td>
+</tr>
+<tr>
+<td>Plan Handle</td>
+<td>Hash of the execution plan build from a SQL</td>
+</tr>
+</tbody>
+</table>
+<p>In simple words: sql_handle is the source code (text in hash format), and the plan_handle is the compiled object code (execution plan in hash format).</p>
+<p>| Query Hash          |                                   |
+| Query Plan Hash     |                                   |</p>
+<p><a href="https://blog.sqlauthority.com/2020/03/22/what-is-difference-between-sql-handle-and-plan-handle-interview-question-of-the-week-269/">https://blog.sqlauthority.com/2020/03/22/what-is-difference-between-sql-handle-and-plan-handle-interview-question-of-the-week-269/</a>
+<a href="https://straightforwardsql.com/posts/query-hash-and-query-plan-hash-mapping/">https://straightforwardsql.com/posts/query-hash-and-query-plan-hash-mapping/</a>
+<a href="https://blog.sqlgrease.com/query_hash-query_plan_hash-useful/#:~:text=A%20query_hash%20is%20a%20computed,of%20them%20within%20the%20plan">https://blog.sqlgrease.com/query_hash-query_plan_hash-useful/#:~:text=A query_hash is a computed,of them within the plan</a>.
+<a href="https://blog.sqlgrease.com/query_hash-query_plan_hash-useful/">https://blog.sqlgrease.com/query_hash-query_plan_hash-useful/</a>
+<a href="https://rauofthameem.wordpress.com/2012/09/14/sql-query-that-gets-sql-statement-from-sqlhandle/">https://rauofthameem.wordpress.com/2012/09/14/sql-query-that-gets-sql-statement-from-sqlhandle/</a></p>
+</li>
+</ul>
+<hr>
+<p>APEX A</p>
+<ul>
+<li>
+<p>Page References</p>
+<ul>
+<li>
+<p>FingerPrints
+The below page talk about how query_hash and query_plan_hash can help to identify the resoruce utilization
+<a href="https://learn.microsoft.com/en-us/archive/blogs/bartd/query-fingerprints-and-plan-fingerprints-the-best-sql-2008-feature-that-youve-never-heard-of">https://learn.microsoft.com/en-us/archive/blogs/bartd/query-fingerprints-and-plan-fingerprints-the-best-sql-2008-feature-that-youve-never-heard-of</a></p>
+</li>
+<li>
+<p>DMVs
+<a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-requests-transact-sql?view=sql-server-ver16">https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-requests-transact-sql?view=sql-server-ver16</a></p>
+<p>Me falto poner una aca</p>
+<p><a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-query-stats-transact-sql?view=sql-server-ver16">https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-query-stats-transact-sql?view=sql-server-ver16</a></p>
+</li>
+<li>
+<p>DMFs
+<a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-sql-text-transact-sql?view=sql-server-ver16">https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-sql-text-transact-sql?view=sql-server-ver16</a></p>
+<p>Me falto poner una aca</p>
+<p><a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-query-plan-transact-sql?view=azuresqldb-current">https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-exec-query-plan-transact-sql?view=azuresqldb-current</a></p>
+</li>
+<li>
+<p>General
+<a href="https://blog.sqlauthority.com/2020/03/22/what-is-difference-between-sql-handle-and-plan-handle-interview-question-of-the-week-269/">https://blog.sqlauthority.com/2020/03/22/what-is-difference-between-sql-handle-and-plan-handle-interview-question-of-the-week-269/</a>
+<a href="https://straightforwardsql.com/posts/query-hash-and-query-plan-hash-mapping/">https://straightforwardsql.com/posts/query-hash-and-query-plan-hash-mapping/</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Books</p>
+<ul>
+<li>SQL Server 2017 Query Performance Tuning by Grant Fritchey</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>Personal Notes
+<ul>
+<li>Buscar el historial de la vista [sys].[dm_exec_query_stats]</li>
+<li>Buscar las limitaciones de la vista [sys].[dm_exec_query_stats]</li>
+<li>Buscar las relaciones de la vista [sys].[dm_exec_query_stats]</li>
+<li>what does &quot;inline literal values&quot; means?</li>
+</ul>
+</li>
+</ul>
+
+            
+            
+        </body>
+        </html>

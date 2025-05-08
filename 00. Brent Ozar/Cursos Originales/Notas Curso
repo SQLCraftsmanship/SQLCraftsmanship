@@ -1,0 +1,82 @@
+
+Descargar Base de Datos de StackOVerflow	
+	https://www.brentozar.com/archive/2015/10/how-to-download-the-stack-overflow-database-via-bittorrent/
+	https://www.brentozar.com/archive/2016/08/dell-dba-days-prep-using-stackexchange-queries-generate-workloads/
+
+Lo relacionado
+	How to Think Like the SQL Server Engine
+		https://downloads.brentozar.com/engine.pdf														-->  IMPRIMIR
+		https://downloads.brentozar.com/How_to_Think_Like_the_SQL_Server_Engine_by_Brent_Ozar.pdf		-->  IMPRIMIR
+		
+		https://BrentOzar.com/go/querybucks	--> Leer al final de "How to Think Like the SQL Server Engine"
+		https://BrentOzar.com/go/costbased	--> Leer al final de "How to Think Like the SQL Server Engine"
+		https://BrentOzar.com/go/statsclass	--> Leer al final de "How to Think Like the SQL Server Engine"
+			https://BrentOzar.com/go/learnstats
+
+		https://www.brentozar.com/archive/2013/08/what-is-the-cxpacket-wait-type-and-how-do-you-reduce-it/
+		https://www.brentozar.com/archive/2017/10/estimated-subtree-cost-query-bucks-no-really/
+		https://www.brentozar.com/archive/2018/12/5-ways-to-change-execution-plans-without-tuning/
+		https://www.brentozar.com/archive/2018/05/hey-thats-not-my-sort/
+		https://www.brentozar.com/archive/2016/09/select-specific-columns-entity-framework-query/
+		https://www.brentozar.com/archive/2013/02/the-fastest-query-is-the-one-you-never-make/
+		https://www.brentozar.com/archive/2019/05/which-queries-should-you-cache-in-the-application/
+		https://www.brentozar.com/archive/2013/12/how-to-cache-stored-procedure-results/
+		https://docs.microsoft.com/en-us/sql/relational-databases/statistics/statistics?view=sql-server-ver15
+		https://docs.microsoft.com/en-us/sql/t-sql/database-console-commands/dbcc-show-statistics-transact-sql?view=sql-server-ver15
+
+	How I Use the First Responder Kit
+		Git
+		https://github.com/BrentOzarULTD/SQL-Server-First-Responder-Kit/tree/main
+
+		https://training.brentozar.com/courses/how-i-use-the-first-responder-kit/lectures/30673437		-->  IMPRIMIR
+		
+		-- Generate Workload
+		https://www.brentozar.com/archive/2016/08/dell-dba-days-prep-using-stackexchange-queries-generate-workloads/
+		
+		-- Explica como usarlo para guardar info y tambien como tomar un baseline
+		https://www.brentozar.com/askbrent/
+	
+Suelto
+	https://www.youtube.com/watch?v=OU75D9YA5sE
+
+	-- Esta pagina tiene todos los waits explicados
+	https://www.sqlskills.com/help/waits/
+	
+	-- Como configurar SSMS
+	https://www.brentozar.com/archive/2018/08/how-i-configure-sql-server-management-studio/  --> Esta muy bueno el resultado final
+	
+	-- Una charla que recomendo sobre link server
+	SQLBits Cono Cunningham Distributed Query Deep Dive
+	
+	-- otro foro para leer que recomendo
+	https://www.sql.kiwi/2011/12/forcing-a-parallel-query-execution-plan.html
+	
+	-- Extended Event
+	https://www.mssqltips.com/sqlservertip/6456/improve-sql-server-extended-events-systemhealth-session/
+	
+	--
+	https://www.brentozar.com/archive/2011/12/letters-that-get-dbas-fired/
+	
+	-- Some performance metric
+	https://www.brentozar.com/archive/2015/09/why-rpo-and-rto-are-actually-performance-metrics-too/
+	https://www.brentozar.com/archive/2018/09/your-sql-server-is-bored-what-low-wait-times-mean/
+	
+	-- PSSDiag
+	https://support.microsoft.com/en-us/topic/pssdiag-data-collection-utility-513a299f-0b45-eb1a-adb4-bc2ad8ecf194
+	
+	-- Calendly, para hacer scheduling de reuniones
+	Calendly.com
+	
+	-- Para contratos personalizados
+	PandaDoc.com
+	
+	-- Connect your apps and automate workflows
+	Zapier.com
+	
+	-- Update for SQL Server
+	https://sqlserverupdates.com/
+	
+	-- Richi Rump
+	https://www.brentozar.com/team/richie-rump/
+	https://github.com/Jorriss
+
