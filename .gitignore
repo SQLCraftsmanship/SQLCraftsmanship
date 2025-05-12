@@ -1,0 +1,33 @@
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# Folders #
+######################
+00. BaseLine/
+00. Brent Ozar/
+00. Course/
+00. Erik Darlin/
