@@ -1105,7 +1105,7 @@ The QO  uses a framework to search and compare many different possible plan alte
   - Rules
     The QO is a search framework. The QO considers transformation of a spacefic query tree from the current state to a different. In the framework used in SQL Server, the transformations are done via RULES, wich are very similar to the mathematical theorems. Rules are matches to tree patterns and are the applied if they are suitable to generate new alternatives. The QO has different kinds of RULES:
 
-    1. Riles that heuristically rewrite a query tree into a new shape are called SUBSTITUTION RULES
+    1. Rules that heuristically rewrite a query tree into a new shape are called SUBSTITUTION RULES
     2. Rules that consider mathematical equivalences are called EXPLIRATION RULES. These rules generate new tree shapes but can't be directly executed.
     3. Rules that convert logical trees into physical tress to be executed are called IMPLEMENTATION RULES.
 
@@ -1148,17 +1148,174 @@ The QO  uses a framework to search and compare many different possible plan alte
     - Logical properties cover things like the output column set, key columns, and whether or not a column can output any nulls.
     - Physical properties are specific to a single plan, and each plan operator has a set of physical properties associated with it.
 
-  - ads
-  - asd
-  - asd
-  - 
+  - Storage of alternatives: The Memo
+    Earlier, this chapter mentioned that the storage of all the alternatives considered during optimization could be large for some queries. The QO contains a mechanism to avoid storing duplicate information, this saving memory during the compilatin process. The structure is called the Memor, and one of its purposes is to find previously explored subtrees and avoid reoptimizing those areas of the plan It exists for the life of one optimization.
+    The Memo works by storing equivalent trees in groups. this model is used to avoid storing trees more than once during query optimization and enables the QO to avoid searching the same possible plan alternatives more than once.
+    In addition to storing equivalent alternatives, groups also store properties structures.
+    The Memo stores all considered plans.
+    If the QO is about to run out of memory while searching the set of plans, it contains logical to pick a **good enough** query plan rather than run out of memory.
+    After the QO finishes searching for a plan it goes through the Memo to select the best alternative from each group that satisfies the query's requirements. These operators are assembled into the final query plan, but it's very close to the showplan output generated for the query plan.
+
+    - Operators
+        SQL Server has around 40 opertaros and even more physical operators.
+        Traditionally operators in SQL Server follow the model shows below:
+
+        ![alt text](image/cap11_5.png.png)
+
+        This **row-based** model works by requesting rows from one or more children and then producing rows to return to the caller. The caller can be another operator or can be sent to the user if it's the uppermost opertor in the query tree. Each operator returns one row ar a time, meaining that the caller must call for each row.
+        I will cover a few of the more rare and exotic operators here and will reference them later.
+
+        * Compute Scalar: Project
+        Is a simple operator that attempts to declare a set of columns, compute some value, or perhaps restricti columns from other operators in the query tree. These operators correspond to the SELECT list in the SQL Language
+
+        * Compute Sequence: Sequence Project
+        Is somewhat similar to a compute Scalar in that it computes a new calue to be added  into the output stream. The key difference is that this works on an ordered stream and contains state that is preserved from row to row.
+        This operator is uauslly seem in the ranking and windowing funtions.
+
+        * semi-join:
+        It describes an operator that performs a join but returns only values from one of its inputs. The query processor uses this internal mechanism to handle most bubqueries.
+        Contrary to pupar belief, a subquery isn't always executed and cached in a temporary table, its trated much like a regular join. Eaxmple: Suppouse that you need to ask a sales tracking system for a store to show you all customers who have placed an order in the last 30 days so that you can send them a thank you email.
+
+        ```sql
+        CREATE TABLE Customers(custid int IDENTITY, name NVARCHAR(100)); 
+        CREATE TABLE Orders (orderid INT IDENTITY, custid INT, orderdate DATE, amount MONEY); 
+        INSERT INTO Customers(name) VALUES ('Conor Cunningham'); 
+        INSERT INTO Customers(name) VALUES ('Paul Randal'); 
+        INSERT INTO Orders(custid, orderdate, amount) VALUES (1, '2008-08-12', 49.23); 
+        INSERT INTO Orders(custid, orderdate, amount) VALUES (1, '2008-08-14', 65.00); 
+        INSERT INTO Orders(custid, orderdate, amount) VALUES (2, '2008-08-12', 123.44); 
+        -- Let's find out customers who have ordered something in the last month  
+        -- Semantically wrong way to ask the question - returns duplicate names 
+        SELECT name FROM Customers C INNER JOIN Orders O ON C.custid = O.custid WHERE  DATEDIFF("m", O.orderdate, '2008-08-30') < 1 
+        
+        -- and then people try to "fix" by adding a distinct 
+        SELECT DISTINCT name  
+        FROM  Customers C  
+        INNER JOIN  Orders O  
+        ON C.custid = O.custid  
+        WHERE DATEDIFF("m", O.orderdate, '2008-08-30') < 1; 
+        
+        -- this happens to work, but it is fragile, hard to modify, and it is usually not done properly. 
+        -- the subquery way to write the query returns one row for each matching Customer 
+        SELECT name  
+        FROM Customers C  
+        WHERE  EXISTS ( SELECT 1  FROM Orders O  WHERE C.custid = O.custid AND DATEDIFF("m", O.orderdate, '2008-08-30') < 1 ); 
+        -- note that the subquery plan has a cheaper estimated cost result  
+        -- and should be faster to run on larger systems
+        ```
+
+        ![alt text](image/cap11_6.png)
+    
+    - Apply
+        Since SQL server 2005, CROSS APPLY and OUTER APPLY represent a special kind of subquery.
+        The most common application for this feature is to do an index lookup join.
+
+        ```sql
+        CREATE TABLE idx1(col1 INT PRIMARY KEY, col2 INT); 
+        CREATE TABLE idx2(col1 INT PRIMARY KEY, col2 INT); 
+        GO 
+        SELECT * FROM idx1  
+        CROSS APPLY ( SELECT * FROM idx2 WHERE idx1.col1=idx2.col1) AS a;
+        ```
+
+        ![alt text](image/cap11_7.png)
+
+        In boths cases, a value from the outer table is referenced as an oargunment to the seek on the inner table.
+        The apply operator is almost like a function call in a procedural langueage. For Each row from the outer (left) side, some logic on the inner (right) side is evaluated and zero or more rows are returned for that invocation of the right subtree.
+
+    - Spools
+        SQL Server has a number of different, specialized spools, each one highly tuned for some scenario. Conceptually, they all do the same thing—they read all the rows from the input, store them in memo-ry or spill it to disk, and then allow operators to read the rows from this cache. Spools exist to make a copy of the rows.
+        The most exotic spool operation is called a common subexpression. This spool can be written once and then read by multiple, different children in the query. It’s currently the only operator that can have multiple parents in the final query plan.
+        Common subexpression spools have only one client at a time. So, the first instance populates the spool, and each later reference reads from this spool in sequence.
+        Common subexpression spools are used most frequently in wide update plans, the are also used in windowed aggregate funcitons.
+
+        ```sql
+        CREATE TABLE window1(col1 INT, col2 INT); 
+        GO 
+        
+        DECLARE @i INT=0; 
+        WHILE @i<100 
+        BEGIN 
+            INSERT INTO window1(col1, col2) 
+            VALUES (@i/10, rand()*1000); 
+            SET @i+=1; 
+        END;  
+        
+        SELECT col1, SUM(col2) OVER(PARTITION BY col1) FROM window1
+        ```
+        ![alt text](image/cap11_8.png.png)
+
+    - Exchange
+        The Exchange operator is used to represent parallelism in query plans. This can be seen in the show-plan as a Gather Streams, Repartition Streams, or Distribute Streams operation, based on whether it’s collecting rows from threads or distributing rows to threads, respectively. 
+        
+        - Spools
+        - Spools
+    asd
+    ads
+    asd
+    
+- Optimizer architecture
+  The QO contains many optimization phases that each perform different functions.
+  The major phases in the optimization of a query, as show below are as follows:
+
+  * Simplification
+  * Trivial plan
+  * Auto-stats create/update
+  * Exploration/Implementation(phases)
+  * Convert to executable plan
+
+  ![alt text](image/cap11_10.png)
+
+    - Before otimization
+    The SQL Server query processor performs several steps before actual optimization process begins. View expansion is one major preoptimization activity. Coalescing adjacent UNION operations is another preoptimization transformation that is perfromed to simplify the tree
+
+    - Simplification
+    Early in optimization, the tree is normalized in the Simplification phase to convert the tree from a form linked closely to the user syntax into one that helps later processing. For example, the QO detects semantic contradictions in the query and removes them by rewriting the query into a simpler form.
+    The Simplification phase also performs a number of other tree rewrites, including the following.
+    * Grouping joins together and picking an initial join order, based on cardinality data for each table.
+    * Finding contradictions in queries that can allow portions of a query not to be executed
+    * Performing the necessary work to rewrite SELECT lists to match computed columns
+
+    - Trivial plan/auto-parameterization
+    The main optimizatino path in SQL Server is a very powerfull cost-based model of a query's execution time.
+    To be able to satisfy small query applications well, SQL Server ues a fast path to identify queries where cost based optimization isn't needed. This means that only one plan is available to execute or an obvious best plan can be identified. In these cases, The QO directly generates the best plan and returns it to the system to be executed.
+    
+    The SQL Server query processor actually takes this concept one step further. When simple queries are compiled and optimized, the query processor attempts to rewrite them into an equivalent parameterized query instead. If the plan is determined to be trivial, the parameterized query is turned into an executable plan. Then, future queries that have the same shape except for constants in well-known locations in the query text just run the existing compiled query and avoid going through the Query Optimizer at all. 
+
+    ```sql
+    SELECT text     
+    FROM sys.dm_exec_query_stats AS qs      
+    CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st 
+    WHERE st.text LIKE '%Table1%';  
+    ---------------------------------------- 
+    (@1 tinyint)SELECT [col1] FROM [Table1] WHERE [col2]=@1
+    ```
+
+    The other choice is full, meaning that cost-based optimization was performed.
+
+    - Limitations
+    Using more complex features can disqualify a query from being considered trivial because those features always have a cost-based plan choice or are too difficult to 
+    identify as trivial. Examples of query features that cause a query not to be considered trivial include Distributed Query, Bulk Insert, XPath queries, queries with joins or subqueries, queries with hints, some cursor queries, and queries over tables containing filtered indexes.
+
+    SQL Server 2005 added another feature, forced parameterization, to auto-parameterize queries more aggressively. This feature parameterizes all constants, ignoring cost-based considerations. The benefit of this feature is that it can reduce compilations, compilation time, and the number of plans in the procedure cache. All these things can improve system performance. On the other hand, this feature can reduce performance when different parameter values would cause different plans to be selected. These values are used in the Query Optimizer’s cardinality and property framework to decide how many rows to return from each possible plan choice, and forced parameterization blocks 
+    these optimizations.
+    
+    - The Memo: exploring multiple plans efficiently
+    The core structure of the Query Optimizer is the Memo. This structure helps store the result of all the rules run in the Query Optimizer, and it also helps guide the search of possible plans to find a good plan quickly and to avoid searching a subtree more than once.
+    the Memo consist of a series of groups.
+    Rules are the mechanism that allow the memor to explore new alternatives during the optimization process.
+
+    An optimization search pass is split into two parts. In the first part of the search, exploration rules match logical trees and generate new, equivalent alternative logical trees that are inserted into the Memo. Implementation rules run next, generating physical trees from the logical trees. After a physical tree is generated, it’s evaluated by the costing component to determine the cost for this query tree. The resulting cost is stored in the Memo for that alternative. When all physical alternatives and  their costs are generated for all groups in the Memo, the Query Optimizer finds the one query tree in the Memo that has the lowest cost and then copies that into a standalone tree. The selected physical tree is very close to the showplan form of the tree.
+
+    The optimization process is optimized further by using multiple search passes.
+    The QO can quit optimization at the end of a phase if a sufficiently good plan has been found. This calculation is done by comparing the estimated cost of the best plan found so far against the actual time spent optimizing so far. If the current best plan is still very expensive, another phase is run to try to find a better plan. This model allows the Query Optimizer to generate plans efficiently for a wide range of workloads. 
+    By the end of the search, the Query Optimizer has selected a single plan to be returned to the system. This plan is copied from the Memo into a separate tree format that can be stored in the Procedure Cache. During this process, a few small, physical rewrites are performed. Finally, the plan is copied into a new piece of contiguous memory and is stored in the procedure cache
+    
+
+- Statistics, cardinality estimation, and costing
   
-- asdf
-- asdf
-- asdf
-- asdf
-- asdf
-- sadf
+
+
 - asdf
 - asdf
 - sadf
