@@ -4,6 +4,8 @@
     - All should be created on Stored Procedures or Functions
     - All objects has header
 
+    <!-- ================= Start Server Checks ================= -->
+
     1. SQL Version
         dbo.sp_SQLVersionInfo
 
@@ -66,6 +68,9 @@
         12.1. Get I/O utilization by database (Query 39) (IO Usage By Database)
         12.2. I/O Statistics by file for the current database  (Query 61) (IO Stats By File)
         12.3. Lists the top statements by average input/output usage for the current database (Query 70) (Top IO Statements)
+        SUMAR ESTO !!!!!!!!!!!!!
+        22.7. 30_io_vfile_stats      BO
+        22.8. 31_io_vfile_stats_now  BO
 
     13. NUMA
         13.1. SQL Server NUMA Node information  (Query 13) (SQL Server NUMA Info)
@@ -75,95 +80,185 @@
         14.1. Read most recent entries from all SQL Server Error Logs (Query 25) (Error Log Entries)
         14.2. Look for I/O requests taking longer than 15 seconds in the six most recent SQL Server Error Logs (Query 33) (IO Warnings)
 
+    <!-- ================= Start Database Checks ================= -->
+
     15. Backups
         15.1. Last backup information by database (Query 8) (Last Backup By Database)
         15.2. Look at recent Full backups for the current database (Query 89) (Recent Full Backups)
         15.3. 41_backup_throughput BO
 
+    16. TEMPDB
+        16.1. Get VLF Counts for all databases on the instance (Query 37) (VLF Counts)
+        16.2. Get number of data files in tempdb database (Query 26) (TempDB Data Files)
+        16.3. Find unequal tempdb data initial file sizes (Query 27) (Tempdb Data File Sizes)
+        16.4. Get tempdb version store space usage by database (Query 41) (Version Store Space Usage)
+        16.5. Status of last VLF for current database  (Query 59) (Last VLF Status)
+        16.6. TempDB_and_Tran_Analysis (from Microsoft)
 
-
-
-    11. Accelerator
-        11.1. Get detailed accelerator status information (Query 9) (Accelerator Status)
-            QUE ES ESTO?
-    12. Agent Jobs
-        12.1. Get SQL Server Agent jobs and Category information (Query 10) (SQL Server Agent Jobs)
-        12.2. Amount
-        12.3. History
-        12.4. LongRunningJobs
-        12.5. 04_agent_job_maintenance_plans BO
-    13. SQL Server Agent Alerts
-        13.1. Get SQL Server Agent Alert Information (Query 11) (SQL Server Agent Alerts)
-    16. Cluster Info
-        16.1. General
-            16.1.1. Get information about your cluster nodes and their status  (Query 15) (Cluster Node Properties)
-        16.2. AlwaysOn
-            16.2.1. Diagnostic (from Microsoft)
-            16.2.2. Get information about any AlwaysOn AG cluster this instance is a part of (Query 16) (AlwaysOn AG Cluster)
-            16.2.3. Good overview of AG health and status (Query 17) (AG Status)
-        16.3. Mirroring
-        16.4. LogShipping
-    17. Pages
-        17.1. Look at Suspect Pages table (Query 24) (Suspect Pages)
-        17.2. 05_suspect_pages BO
-        17.3. 06_auto_page_repair_mirroring BO
-        17.4. 07_auto_page_repair_ag BO
-    22. TEMPDB
-        22.1. TempDB_and_Tran_Analysis (from Microsoft)
-        22.2. Get VLF Counts for all databases on the instance (Query 37) (VLF Counts)
-        22.3. Get number of data files in tempdb database (Query 26) (TempDB Data Files)
-        22.4. Find unequal tempdb data initial file sizes (Query 27) (Tempdb Data File Sizes)
-        22.5. Get tempdb version store space usage by database (Query 41) (Version Store Space Usage)
-        22.6. Status of last VLF for current database  (Query 59) (Last VLF Status)
-        22.7. 30_io_vfile_stats      BO
-        22.8. 31_io_vfile_stats_now  BO
-    23. Database 
-        23.1. Settings
-        23.2. File names and paths for all user and system databases on instance  (Query 28) (Database Filenames and Paths)
-        23.3. Recovery model, log reuse wait description, log file size, log usage size  (Query 35) (Database Properties)
-        23.4. Get database scoped configuration values for current database (Query 60) (Database-scoped Configurations)
-        5.1. Check DB ID
-        5.2. Check DB Size
+    17. Database 
+        17.1. Settings
+        17.2. File names and paths for all user and system databases on instance  (Query 28) (Database Filenames and Paths)
+        17.3. Recovery model, log reuse wait description, log file size, log usage size  (Query 35) (Database Properties)
+        17.4. Get database scoped configuration values for current database (Query 60) (Database-scoped Configurations)
+        17.1. Check DB ID
+        17.2. Check DB Size
             02_database_sizes Brent ozar
-    24. Files
-        24.1. Calculates average latency per read, per write, and per total input/output for each database file  (Query 32) (IO Latency by File)
-        24.2. Individual File Sizes and space available for current database  (Query 57) (File Sizes and Space)
-        . mdf
-        .ndf
-        .log
-            Log space usage for current database  (Query 58) (Log Space Usage)
-    25. Resource Governor 
-        25.1. Resource Governor Resource Pool information (Query 34) (RG Resource Pools)
-    26. Indexes
-        26.1. Missing Indexes for all databases by Index Advantage  (Query 36) (Missing Indexes All Databases)
-        26.2. Cached SPs Missing Indexes by Execution Count (Query 69) (SP Missing Index)
-        26.3. Possible Bad NC Indexes (writes > reads)  (Query 71) (Bad NC Indexes)
-        26.4. Missing Indexes for current database by Index Advantage  (Query 72) (Missing Indexes)
-        26.5. Find missing index warnings for cached plans in the current database  (Query 73) (Missing Index Warnings)
-        26.6. Look at most frequently modified indexes and statistics (Query 78) (Volatile Indexes)
-        26.7. Get fragmentation info for all indexes above a certain size in the current database  (Query 79) (Index Fragmentation)
-        26.8. Index Read/Write stats (all tables in current DB) ordered by Reads  (Query 80) (Overall Index Usage - Reads)
-        26.9. Index Read/Write stats (all tables in current DB) ordered by Writes  (Query 81) (Overall Index Usage - Writes)
-    29. Buffer
-        29.1. Get total buffer usage by database for current instance  (Query 40) (Total Buffer Usage by Database)
-        29.2. Breaks down buffers used by current database by object (table, index) in the buffer cache  (Query 74) (Buffer Usage)
-        29.3. Get input buffer information for the current database (Query 86) (Input Buffer)
-    30. Waits
-        30.1. Isolate top waits for server instance since last restart or wait statistics clear  (Query 42) (Top Waits)
-        31.2. 20_waitstats_percent_signal_waits BO
-        30.3. 21_waitstats_since_last_clear  BO
-        30.4. 23_waitstats_last_30_seconds   BO
-    31. connection
-        31.1. Get a count of SQL connections by IP address (Query 43) (Connection Counts by IP Address)
-    52. Sessions
-    32. Blocking
-        32.1. Detect blocking (run multiple times)  (Query 45) (Detect Blocking)
-    33. Page Contention
-        33.1. Show page level contention (Query 46) (Page Contention)
-    34. Top Worker Time Queries
-        34.1. Get top total worker time queries for entire instance (Query 48) (Top Worker Time Queries)
-    35. AdHoc
-        35.1. Find single-use, ad-hoc and prepared queries that are bloating the plan cache  (Query 52) (Ad hoc Queries)
+
+    18. Files
+        18.1. Calculates average latency per read, per write, and per total input/output for each database file  (Query 32) (IO Latency by File)
+        18.2. Individual File Sizes and space available for current database  (Query 57) (File Sizes and Space)
+        18.3. Log space usage for current database  (Query 58) (Log Space Usage)
+
+    19. Cluster Info
+        19.1. General
+            19.1.1. Get information about your cluster nodes and their status  (Query 15) (Cluster Node Properties)
+        19.2. AlwaysOn
+            19.2.1. Diagnostic (from Microsoft)
+            19.2.2. Get information about any AlwaysOn AG cluster this instance is a part of (Query 16) (AlwaysOn AG Cluster)
+            19.2.3. Good overview of AG health and status (Query 17) (AG Status)
+        19.3. Mirroring
+        19.4. LogShipping
+
+
+    <!-- ================= Start Performance Checks ================= -->
+
+    20. Waits
+        20.1. Isolate top waits for server instance since last restart or wait statistics clear  (Query 42) (Top Waits)
+        20.2. 20_waitstats_percent_signal_waits BO
+        20.3. 21_waitstats_since_last_clear  BO
+        20.4. 22_waitstats_latch_wait_detail
+        20.5. 23_waitstats_last_30_seconds   BO
+
+        WARNING
+        Que onda con los scrpits the BO para ver esta info?
+
+    21. Indexes
+        21.1. Missing Indexes for all databases by Index Advantage  (Query 36) (Missing Indexes All Databases)
+        21.2. Cached SPs Missing Indexes by Execution Count (Query 69) (SP Missing Index)
+        21.3. Possible Bad NC Indexes (writes > reads)  (Query 71) (Bad NC Indexes)
+        21.4. Missing Indexes for current database by Index Advantage  (Query 72) (Missing Indexes)
+        21.5. Find missing index warnings for cached plans in the current database  (Query 73) (Missing Index Warnings)
+        21.6. Look at most frequently modified indexes and statistics (Query 78) (Volatile Indexes)
+        21.7. Get fragmentation info for all indexes above a certain size in the current database  (Query 79) (Index Fragmentation)
+        21.8. Index Read/Write stats (all tables in current DB) ordered by Reads  (Query 80) (Overall Index Usage - Reads)
+        21.9. Index Read/Write stats (all tables in current DB) ordered by Writes  (Query 81) (Overall Index Usage - Writes)
+
+        WARNING
+        Que onda con los scrpits the BO para ver esta info?
+
+    22. Locks
+        22.1. Get lock waits for current database (Query 82) (Lock Waits)
+        
+        <!-- THIS IS ONLY TO sql sERVE 2025 -->        
+        22.2. Is Optimized Locking enabled for the current database? (Query 88) (Optimized Locking)
+
+    23. Blocking
+        23.1. Detect blocking (run multiple times)  (Query 45) (Detect Blocking)
+
+    <!-- ================= Start Plan Checks ================= -->
+
+    24. sp_BlitzCache
+        24.1. Plan CPU
+            24.1.1. Queries by Total CPU
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'cpu'
+            24.1.2. Queries by Average CPU
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'avg cpu'
+        24.2. Plan Reads
+            24.2.1. Queries by Total Reads
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'reads'
+            24.2.2. Queries by Average Reads
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'avg reads'
+        24.3. Plan Duration
+            24.3.1. Queries by Total Duration
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'duration'
+            24.3.2. Queries by Average Duration
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'avg duration'
+        24.4. Plan Execution 
+            24.4.1. Queries by Total Executions
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'executions'
+            24.4.2. Queries by Executions per Minute
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'xpm'
+        24.5. Plan Writes
+            24.5.1. Queries by Total Writes
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'writes'
+            24.5.2. Queries by Average Writes
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'avg writes'
+        24.6. Plan Memory
+            24.6.1 Queries by Memory Grant
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'memory grant'
+        24.7. Plan Spill
+            24.7.1. Queries by Total TempDB Spills
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'spills'
+            24.7.2. Queries by Average TempDB Spill Size
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'avg spills'
+        24.8. Plan Recent
+            24.8.1.Queries by Compilation Date
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'recent compilations'
+        24.9. PlansCPU ByHash
+            24.9.1 Queries with Multiple Plans in the Cache, by Total CPU
+                sp_BlitzCache @ExpertMode = 1, @SortOrder = 'cpu'
+        24.10. Plan Duplicated 
+            22.10.1. Queries with Multiple Plans in the Cache, by Total Number of Cached Plans
+                82_plans_duplicated BO
+
+
+    <!-- ============== Start Replication Checks =============
+        Aca quiero poner todo lo referente a Mirroring, 
+        Logshiping, Always ON, Linked Server. Todo relacionado 
+        a replicacion     -->
+    
+    25. Link Server
+        25.1. Linked Server Configuration (from Microsoft)
+
+    26. Replication
+        26.1. Check Replication (from Microsoft) TERMINAR!!!!!!
+
+    27. Pages
+        27.1. Look at Suspect Pages table (Query 24) (Suspect Pages)
+        27.2. 05_suspect_pages BO
+        27.3. 06_auto_page_repair_mirroring BO
+        27.4. 07_auto_page_repair_ag BO
+
+    <!-- =================   Start Job Checks   ================= -->
+
+    28. Agent Jobs
+        28.1. Get SQL Server Agent jobs and Category information (Query 10) (SQL Server Agent Jobs)
+        28.2. 04_agent_job_maintenance_plans BO (12.4. LongRunningJobs esta incluido si veo 3er resultado)
+        28.3. Amount
+        28.4. History Error
+
+    29. SQL Server Agent Alerts
+        29.1. Get SQL Server Agent Alert Information (Query 11) (SQL Server Agent Alerts)
+
+    <!-- ============= Start Objects Database Checks ============ -->
+    
+    30. Object Information
+        . Amount of: Tables, Views, SP, FX, TRG, Assemblies, User Type, Sequence, Partition Schemes, Partition function, Users, Schemas
+
+    31. Tables
+        31.2. Table amount
+        31.1. Get Schema names, Table names, object size, row counts, and compression status for clustered index or heap  (Query 75) (Table Sizes)
+        31.4. Get Heaps/Heads tables.
+        /* Si bien me muestra nueva info tiene cosas duplicadas y no termina siendo util esta query
+        31.3. Get some key table properties (Query 76) (Table Properties) */
+
+    32. UDF Stats by DB
+        32.1. Look at UDF execution statistics (Query 55) (UDF Stats by DB)
+        32.2. Look at UDF execution statistics (Query 83) (UDF Statistics)
+        32.3. Determine which scalar UDFs are in-lineable (Query 84) (Inlineable UDFs)
+
+    33. Triggers
+        33.1. Get Info Triggers DB and Server
+
+    <!-- =========== Start Resource Governor Checks ============ -->
+    
+    34. Resource Governor 
+        34.1. Resource Governor Resource Pool information (Query 34) (RG Resource Pools)
+
+    <!-- ============== Start Query Store Checks =============== 
+         ==== For now I am not going to add QS information ===== 
+    -->
+    <!--
     36. Query Store
         36.1. General checks (from Microsoft)
         36.2. Get top total logical reads queries for entire instance (Query 53) (Top Logical Reads Queries)
@@ -176,93 +271,16 @@
         36.9. Top Cached SPs By Total Physical Reads. Physical reads relate to disk read I/O pressure  (Query 67) (SP Physical Reads)
         36.10. Top Cached SPs By Total Logical Writes (Query 68) (SP Logical Writes)
         36.11. Get Query Store Options for this database (Query 85) (Query Store Options)
-    37. UDF Stats by DB
-        37.1. Look at UDF execution statistics (Query 55) (UDF Stats by DB)
-        37.2. Look at UDF execution statistics (Query 83) (UDF Statistics)
-        37.3. Determine which scalar UDFs are in-lineable (Query 84) (Inlineable UDFs)
-    38. Tables
-        38.1. Table Size
-        Get Schema names, Table names, object size, row counts, and compression status for clustered index or heap  (Query 75) (Table Sizes)
-        38.2. Table amount
-        38.3. Get some key table properties (Query 76) (Table Properties)
-        38.4. Constraint
-            38.4.1. Check Heads
-            38.4.2. Check PK
-            38.4.3. Check QK
-            38.4.4. Check FK
-    39. Stats
-        39.1. When were Statistics last updated on all indexes?  (Query 77) (Statistics Update)
-    40. Locks
-        40.1. Get lock waits for current database (Query 82) (Lock Waits)
-        40.2. Is Optimized Locking enabled for the current database? (Query 88) (Optimized Locking)
-    41. Tuning advisor
-        41.1. Get database automatic tuning options (Query 87) (Automatic Tuning Options)
-    42. Change Tracking
-        42.1. Change Tracking Script for PSSDiag (from Microsoft)
-    43. Change Data Capture
-        43.1. Check CDC (from Microsoft)
-    44. Link Server
-        44.1. Linked Server Configuration (from Microsoft)
+    -->
+
+    <!-- ================= Start General Checks ================= -->
     45. Misc
         45.1. De todo un poco (from Microsoft)
-    46. Replication
-        46.1. Check Replication (from Microsoft)
-    47. DB Mail
-        16.1. Check set up and use (from Microsoft)
-    48. Service Brokers
-    49. Users and Logins
-    50. Triggers
-    51. SP per DBs
-    52. Log Files
-    53. Plans
-        82_plans_duplicated BO
-    53. SQL_Server_PerfStats_Snapshot
-        15.1. 60_perf_counters BO
-        15.1. SQL_Server_PerfStats_Snapshot (from Microsoft)
-        15.2. SQL_Server_PerfStats (from Microsoft)
-        
-        Ver en detalle que hacen estos checks?
-        9.1. High IO (from Microsoft)
-        9.2. High CPU (from Microsoft)
+              Script Name = MiscDiagInfo.sql
+              Note = It's a good script but for the moment I am not going to include it.
 
-        WHERE counter_name = 'Batch Requests/sec' AND object_name LIKE '%SQL Statistics%';
-        WHERE counter_name = 'SQL Compilations/sec'        AND object_name LIKE '%SQL Statistics%';
-        WHERE counter_name = 'SQL Re-Compilations/sec'     AND object_name LIKE '%SQL Statistics%';
-        WHERE counter_name = 'Lock Waits/sec'        AND instance_name = '_Total'        AND object_name LIKE '%Locks%';
-        WHERE counter_name = 'Page Splits/sec'       AND object_name LIKE '%Access Methods%'; 
-        WHERE counter_name = 'Checkpoint Pages/sec'  AND object_name LIKE '%Buffer Manager%';       
-        WHERE counter_name = 'Buffer cache hit ratio'      AND object_name LIKE '%Buffer Manager%') a  
-        WHERE counter_name = 'Buffer cache hit ratio base' AND object_name LIKE '%Buffer Manager%') b    
-        WHERE counter_name = 'Page life expectancy '       AND object_name LIKE '%Buffer Manager%') c
-        WHERE counter_name = 'Batch Requests/sec' AND object_name LIKE '%SQL Statistics%') d   
-        WHERE counter_name = 'SQL Compilations/sec' AND object_name LIKE '%SQL Statistics%') e 
-        WHERE counter_name = 'SQL Re-Compilations/sec' AND object_name LIKE '%SQL Statistics%') f
-        WHERE counter_name = 'Lock Waits/sec'          AND instance_name = '_Total'        AND object_name LIKE '%Locks%') h
-        WHERE counter_name = 'Page Splits/sec' AND object_name LIKE '%Access Methods%') i
-        WHERE counter_name = 'Processes blocked' AND object_name LIKE '%General Statistics%') j
-        WHERE counter_name = 'Checkpoint Pages/sec' AND object_name LIKE '%Buffer Manager%') k
-        WHERE counter_name = 'Total Server Memory (KB)'
-        WHERE counter_name = 'Target Server Memory (KB)'
-        WHERE object_name= @Instancename+'Buffer Manager' and counter_name = 'Total pages' 
-        WHERE object_name=@Instancename+'Buffer Manager' and counter_name = 'Database pages' 
-        WHERE object_name=@Instancename+'Buffer Manager' and counter_name = 'Free pages'
-        WHERE object_name=@Instancename+'Buffer Manager' and counter_name = 'Reserved pages'
-        WHERE object_name=@Instancename+'Buffer Manager' and counter_name = 'Stolen pages'
-        WHERE object_name=@Instancename+'Plan Cache' and counter_name = 'Cache Pages'  and instance_name = '_Total'
-        WHERE counter_name = 'Connection Memory (KB)'
-        WHERE counter_name = 'Lock Memory (KB)'
-        WHERE counter_name = 'SQL Cache Memory (KB)'
-        WHERE counter_name = 'Optimizer Memory (KB) '
-        WHERE counter_name = 'Granted Workspace Memory (KB) '
-        WHERE counter_name = 'Cursor memory usage' and instance_name = '_Total'
-        WHERE a.counter_name = 'Buffer cache hit ratio'
-    54. sp_BlitzCache
-        70_sp_BlitzIndex
-        blitzLock
-    15. SQL Server Services information (Query 7) (SQL Server Services Info)
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------
 
 EXECUTION ORDER
     1. [dbo].[sp_SQLVersionInfo]
@@ -298,14 +316,13 @@ Como lo haria yo.
 
     . Crear un diccionario de las cosas a chequear
 
-
 Architecture
 
     Technologies
         . T-SQL
         . Python (API/Backend)
         . JSON (intermediate data format)
-        . FastAPI (for APIs)
+        . FastAPI (framework web for Python)
         . Excel/CSV (for visualization) 
 
     Workflow

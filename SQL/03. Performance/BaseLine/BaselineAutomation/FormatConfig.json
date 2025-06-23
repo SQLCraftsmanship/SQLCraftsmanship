@@ -1,0 +1,32 @@
+{
+    "[dbo].[sp_OSInfo].sql": {
+        "tab_name": "OSInfo",
+        "tab_color": "00FF00",
+        "column_headers": ["HostName", "OSName", "OSVersion", "OSManufacturer", "OSConfiguration", "WindowsDirectory", "SystemDirectory", "BootDevice", "SystemLocale",	"InputLocale", "TimeZone", "PageFileLocations", "Domain"],
+        "header_color": "00FF00"
+    },
+    "[dbo].[sp_GetLastReboot].sql": {
+        "tab_name": "LastReboot",
+        "tab_color": "0000FF",
+        "column_headers": ["sqlserver_start_time"],
+        "header_color": "0000FF"
+    },
+    "[dbo].[sp_SQLVersionInfo].sql": {
+        "tab_name": "SQLVersionInfo",
+        "tab_color": "FF0000",
+        "column_headers": ["MachineName", "InstanceName", "ProductVersion", "MajorVersion Description", "MajorVersion", "MinorVersion", "BuildNumber", "Revision", "PatchLevel", "Edition", "IsClustered", "AlwaysOnEnabled", "Warning"],
+        "header_color": "FF0000"
+    },
+    "[dbo].[sp_SQLServiceInfo].sql": {
+        "tab_name": "SQLServiceInfo",
+        "tab_color": "FF0000",
+        "column_headers": ["servicename", "startup_type_desc", "status_desc", "last_startup_time", "service_account", "is_clustered", "cluster_nodename", "filename", "instant_file_initialization_enabled"],
+        "header_color": "FF0000"
+    },
+    "[dbo].[sp_SQLServerProperty].sql": {
+        "tab_name": "SQLServerProperty",
+        "tab_color": "FF0000",
+        "column_headers": ["MachineName", "ServerName", "InstanceName", "Edition", "ProductVersion", "ProductLevel", "ProductUpdateLevel", "ProductBuildType", "ProductUpdateReference", "ProductMajorVersion", "Collation", "ComparisonStyle", "SqlCharSet", "SqlCharSetName", "SqlSortOrder", "SqlSortOrderName", "InstanceDefaultDataPath", "InstanceDefaultLogPath", "InstanceDefaultBackupPath", "ErrorLogFileName]", "IsClustered", "IsFullTextInstalled", "IsIntegratedSecurityOnly", "IsHadrEnabled", "HadrManagerStatus", "IsXTPSupported", "IsPolyBaseInstalled", "IsAdvancedAnalyticsInstalled", "IsExternalAuthenticationOnly", "IsLocalDB", "BuildClrVersion", "FilestreamConfiguredLevel", "FilestreamEffectiveLevel", "FilestreamShareName","ProcessID", "EngineEdition", "DatabaseEngineEdition", "DatabaseEngineType", "IsManagedInstance", "IsIoLatencySensitiveEnabled", "IsBigDataCluster", "IsCloud", "SkuName", "ResourceId", "InstanceID", "AzureADAuthentication", "IsTempDbMetadataMemoryOptimized"],
+        "header_color": "FF0000"
+    }
+}

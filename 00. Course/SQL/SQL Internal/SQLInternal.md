@@ -1270,46 +1270,40 @@ The QO  uses a framework to search and compare many different possible plan alte
     The SQL Server query processor performs several steps before actual optimization process begins. View expansion is one major preoptimization activity. Coalescing adjacent UNION operations is another preoptimization transformation that is perfromed to simplify the tree
 
     - Simplification
-    Early in optimization, the tree is normalized in the Simplification phase to convert the tree from a form linked closely to the user syntax into one that helps later processing. For example, the QO detects semantic contradictions in the query and removes them by rewriting the query into a simpler form.
-    The Simplification phase also performs a number of other tree rewrites, including the following.
-    * Grouping joins together and picking an initial join order, based on cardinality data for each table.
-    * Finding contradictions in queries that can allow portions of a query not to be executed
-    * Performing the necessary work to rewrite SELECT lists to match computed columns
+      Early in optimization, the tree is normalized in the Simplification phase to convert the tree from a form linked closely to the user syntax into one that helps later processing. For example, the QO detects semantic contradictions in the query and removes them by rewriting the query into a simpler form. The Simplification phase also performs a number of other tree rewrites, including the following.
+      * Grouping joins together and picking an initial join order, based on cardinality data for each table.
+      * Finding contradictions in queries that can allow portions of a query not to be executed
+      * Performing the necessary work to rewrite SELECT lists to match computed columns
 
     - Trivial plan/auto-parameterization
-    The main optimizatino path in SQL Server is a very powerfull cost-based model of a query's execution time.
-    To be able to satisfy small query applications well, SQL Server ues a fast path to identify queries where cost based optimization isn't needed. This means that only one plan is available to execute or an obvious best plan can be identified. In these cases, The QO directly generates the best plan and returns it to the system to be executed.
-    
-    The SQL Server query processor actually takes this concept one step further. When simple queries are compiled and optimized, the query processor attempts to rewrite them into an equivalent parameterized query instead. If the plan is determined to be trivial, the parameterized query is turned into an executable plan. Then, future queries that have the same shape except for constants in well-known locations in the query text just run the existing compiled query and avoid going through the Query Optimizer at all. 
+      The main optimizatino path in SQL Server is a very powerfull cost-based model of a query's execution time. To be able to satisfy small query applications well, SQL Server ues a fast path to identify queries where cost based optimization isn't needed. This means that only one plan is available to execute or an obvious best plan can be identified. In these cases, The QO directly generates the best plan and returns it to the system to be executed.
+      
+      The SQL Server query processor actually takes this concept one step further. When simple queries are compiled and optimized, the query processor attempts to rewrite them into an equivalent parameterized query instead. If the plan is determined to be trivial, the parameterized query is turned into an executable plan. Then, future queries that have the same shape except for constants in well-known locations in the query text just run the existing compiled query and avoid going through the Query Optimizer at all. 
 
-    ```sql
-    SELECT text     
-    FROM sys.dm_exec_query_stats AS qs      
-    CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st 
-    WHERE st.text LIKE '%Table1%';  
-    ---------------------------------------- 
-    (@1 tinyint)SELECT [col1] FROM [Table1] WHERE [col2]=@1
-    ```
+      ```sql
+      SELECT text     
+      FROM sys.dm_exec_query_stats AS qs      
+      CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st 
+      WHERE st.text LIKE '%Table1%';  
+      ---------------------------------------- 
+      (@1 tinyint)SELECT [col1] FROM [Table1] WHERE [col2]=@1
+      ```
 
-    The other choice is full, meaning that cost-based optimization was performed.
+      The other choice is full, meaning that cost-based optimization was performed.
 
     - Limitations
-    Using more complex features can disqualify a query from being considered trivial because those features always have a cost-based plan choice or are too difficult to 
-    identify as trivial. Examples of query features that cause a query not to be considered trivial include Distributed Query, Bulk Insert, XPath queries, queries with joins or subqueries, queries with hints, some cursor queries, and queries over tables containing filtered indexes.
+      Using more complex features can disqualify a query from being considered trivial because those features always have a cost-based plan choice or are too difficult to 
+      identify as trivial. Examples of query features that cause a query not to be considered trivial include Distributed Query, Bulk Insert, XPath queries, queries with joins or subqueries, queries with hints, some cursor queries, and queries over tables containing filtered indexes.
 
-    SQL Server 2005 added another feature, forced parameterization, to auto-parameterize queries more aggressively. This feature parameterizes all constants, ignoring cost-based considerations. The benefit of this feature is that it can reduce compilations, compilation time, and the number of plans in the procedure cache. All these things can improve system performance. On the other hand, this feature can reduce performance when different parameter values would cause different plans to be selected. These values are used in the Query Optimizer’s cardinality and property framework to decide how many rows to return from each possible plan choice, and forced parameterization blocks 
-    these optimizations.
+      SQL Server 2005 added another feature, forced parameterization, to auto-parameterize queries more aggressively. This feature parameterizes all constants, ignoring cost-based considerations. The benefit of this feature is that it can reduce compilations, compilation time, and the number of plans in the procedure cache. All these things can improve system performance. On the other hand, this feature can reduce performance when different parameter values would cause different plans to be selected. These values are used in the Query Optimizer’s cardinality and property framework to decide how many rows to return from each possible plan choice, and forced parameterization blocks 
+      these optimizations.
     
     - The Memo: exploring multiple plans efficiently
-    The core structure of the Query Optimizer is the Memo. This structure helps store the result of all the rules run in the Query Optimizer, and it also helps guide the search of possible plans to find a good plan quickly and to avoid searching a subtree more than once.
-    the Memo consist of a series of groups.
-    Rules are the mechanism that allow the memor to explore new alternatives during the optimization process.
+      The core structure of the Query Optimizer is the Memo. This structure helps store the result of all the rules run in the Query Optimizer, and it also helps guide the search of possible plans to find a good plan quickly and to avoid searching a subtree more than once. the Memo consist of a series of groups. Rules are the mechanism that allow the memor to explore new alternatives during the optimization process.
 
-    An optimization search pass is split into two parts. In the first part of the search, exploration rules match logical trees and generate new, equivalent alternative logical trees that are inserted into the Memo. Implementation rules run next, generating physical trees from the logical trees. After a physical tree is generated, it’s evaluated by the costing component to determine the cost for this query tree. The resulting cost is stored in the Memo for that alternative. When all physical alternatives and  their costs are generated for all groups in the Memo, the Query Optimizer finds the one query tree in the Memo that has the lowest cost and then copies that into a standalone tree. The selected physical tree is very close to the showplan form of the tree.
+      An optimization search pass is split into two parts. In the first part of the search, exploration rules match logical trees and generate new, equivalent alternative logical trees that are inserted into the Memo. Implementation rules run next, generating physical trees from the logical trees. After a physical tree is generated, it’s evaluated by the costing component to determine the cost for this query tree. The resulting cost is stored in the Memo for that alternative. When all physical alternatives and  their costs are generated for all groups in the Memo, the Query Optimizer finds the one query tree in the Memo that has the lowest cost and then copies that into a standalone tree. The selected physical tree is very close to the showplan form of the tree.
 
-    The optimization process is optimized further by using multiple search passes.
-    The QO can quit optimization at the end of a phase if a sufficiently good plan has been found. This calculation is done by comparing the estimated cost of the best plan found so far against the actual time spent optimizing so far. If the current best plan is still very expensive, another phase is run to try to find a better plan. This model allows the Query Optimizer to generate plans efficiently for a wide range of workloads. 
-    By the end of the search, the Query Optimizer has selected a single plan to be returned to the system. This plan is copied from the Memo into a separate tree format that can be stored in the Procedure Cache. During this process, a few small, physical rewrites are performed. Finally, the plan is copied into a new piece of contiguous memory and is stored in the procedure cache
+      The optimization process is optimized further by using multiple search passes. The QO can quit optimization at the end of a phase if a sufficiently good plan has been found. This calculation is done by comparing the estimated cost of the best plan found so far against the actual time spent optimizing so far. If the current best plan is still very expensive, another phase is run to try to find a better plan. This model allows the Query Optimizer to generate plans efficiently for a wide range of workloads. By the end of the search, the Query Optimizer has selected a single plan to be returned to the system. This plan is copied from the Memo into a separate tree format that can be stored in the Procedure Cache. During this process, a few small, physical rewrites are performed. Finally, the plan is copied into a new piece of contiguous memory and is stored in the procedure cache
     
 
 - Statistics, cardinality estimation, and costing
@@ -1690,7 +1684,6 @@ The QO  uses a framework to search and compare many different possible plan alte
 
       ![alt text](image/cap11_17.png)
 
-    - asd
 
 
 
