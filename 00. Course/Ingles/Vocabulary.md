@@ -85,4 +85,3 @@ Bag – Do you want a bag for your groceries?
 Store hours – The store hours are from 9 AM to 9 PM.
 Product – The product is out of stock.
 Wait in line – I had to wait in line for 15 minutes.
-
