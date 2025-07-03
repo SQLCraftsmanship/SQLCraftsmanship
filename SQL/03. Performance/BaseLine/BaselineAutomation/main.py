@@ -36,6 +36,9 @@ OUTPUT_DIR = os.path.join(BASE_DIR, 'Output')
 LOG_DIR = os.path.join(BASE_DIR, 'Log')
 FORMAT_CONFIG_PATH = os.path.join(BASE_DIR, 'FormatConfig.json')
 
+# print(f"****** {SCRIPTS_DIR}  ******")
+# print(f"****** {EXECUTE_SCRIPT_PATH} ******")
+
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 if not os.path.exists(LOG_DIR):
@@ -84,7 +87,7 @@ def execute_scripts_in_folder(cursor, folder_path):
         print_success(f"***** Executing script: {script} *****")
         try:
             with open(script_path, 'r') as file:
-                sql_commands = file.read().split('GO;')
+                sql_commands = file.read().split('GO')
                 for command in sql_commands:
                     if command.strip():
                         cursor.execute(command)
@@ -97,14 +100,29 @@ def execute_scripts_in_folder(cursor, folder_path):
 
 def execute_run_sql(cursor, conn, run_sql_path):
     try:
+        # ... BaseLine\BaselineAutomation\Script\execute\run.sql
+        # print(f"****** The run_sql_path is: {run_sql_path}  ******")
+        
         with open(run_sql_path, 'r') as file:
-            sql_commands = file.read().split('GO;')
+            sql_commands = file.read().split('GO')
+            
+            # The sql_commands is: ['EXEC [master].[dbo].[sp_GetLastReboot]\n', '\n\nEXEC [master].[dbo].[sp_OSInfo]\n', '\n\nEXEC [master].[dbo].[sp_SQLServerProperty]\n', '\n\nEXEC [master].[dbo].[sp_SQLServiceInfo]\n', '\n\nEXEC [master].[dbo].[sp_SQLVersionInfo]\n', ''] 
+            # print(f"****** The sql_commands is: {sql_commands}  ******")
+
         for idx, command in enumerate(sql_commands):
             if command.strip():
                 try:
                     print_success(f"***** Executing stored procedure block {idx + 1}... *****")
                     cursor.execute(command)
-                    save_results_to_excel(cursor, f'SP_{idx + 1}')
+
+                    # The command is: EXEC [master].[dbo].[sp_GetLastReboot]
+                    # Extract the stored procedure name using regex
+                    spName = command.split('[master].')[1].strip() + '.sql'
+                    print(spName)
+                        
+                    # save_results_to_excel(cursor, f'SP_{idx + 1}')
+                    save_results_to_excel(cursor, spName)
+                    
                     conn.commit()
                     print_success(f"***** Block {idx + 1} executed successfully. *****")
                     logging.info(f"Block {idx + 1} executed successfully.")

@@ -1,0 +1,123 @@
+2025-06-24 09:36:27,869 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 09:36:27,871 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 09:36:27,872 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 09:36:27,874 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 09:36:27,877 Block 1 executed successfully.
+2025-06-24 09:36:27,887 Block 2 executed successfully.
+2025-06-24 09:36:27,889 Block 3 executed successfully.
+2025-06-24 09:36:27,891 Block 4 executed successfully.
+2025-06-24 09:36:27,896 Block 5 executed successfully.
+2025-06-24 09:41:11,958 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 09:41:11,959 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 09:41:11,960 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 09:41:11,963 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 09:41:11,965 Block 1 executed successfully.
+2025-06-24 09:41:11,974 Block 2 executed successfully.
+2025-06-24 09:41:11,975 Block 3 executed successfully.
+2025-06-24 09:41:11,978 Block 4 executed successfully.
+2025-06-24 09:41:11,983 Block 5 executed successfully.
+2025-06-24 09:42:42,751 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 09:42:42,753 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 09:42:42,754 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 09:42:42,757 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 09:42:42,759 Block 1 executed successfully.
+2025-06-24 09:42:42,768 Block 2 executed successfully.
+2025-06-24 09:42:42,770 Block 3 executed successfully.
+2025-06-24 09:42:42,773 Block 4 executed successfully.
+2025-06-24 09:42:42,777 Block 5 executed successfully.
+2025-06-24 09:50:36,765 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 09:50:36,767 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 09:50:36,768 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 09:50:36,771 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 09:50:36,774 Block 1 executed successfully.
+2025-06-24 09:50:36,784 Block 2 executed successfully.
+2025-06-24 09:50:36,786 Block 3 executed successfully.
+2025-06-24 09:50:36,788 Block 4 executed successfully.
+2025-06-24 09:50:36,793 Block 5 executed successfully.
+2025-06-24 10:04:26,241 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 10:04:26,243 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 10:04:26,245 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 10:04:26,247 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 10:04:26,249 Error executing block 1: unhashable type: 'set'
+2025-06-24 10:04:26,256 Error executing block 2: unhashable type: 'set'
+2025-06-24 10:04:26,257 Error executing block 3: unhashable type: 'set'
+2025-06-24 10:04:26,260 Error executing block 4: unhashable type: 'set'
+2025-06-24 10:04:26,265 Error executing block 5: unhashable type: 'set'
+2025-06-24 10:05:00,441 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 10:05:00,443 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 10:05:00,444 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 10:05:00,447 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 10:05:00,450 Block 1 executed successfully.
+2025-06-24 10:05:00,459 Block 2 executed successfully.
+2025-06-24 10:05:00,460 Block 3 executed successfully.
+2025-06-24 10:05:00,463 Block 4 executed successfully.
+2025-06-24 10:05:00,467 Block 5 executed successfully.
+2025-06-24 10:08:47,796 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 10:08:47,797 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 10:08:47,799 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 10:08:47,801 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 10:08:47,803 Block 1 executed successfully.
+2025-06-24 10:08:47,813 Block 2 executed successfully.
+2025-06-24 10:08:47,814 Block 3 executed successfully.
+2025-06-24 10:08:47,817 Block 4 executed successfully.
+2025-06-24 10:08:47,821 Block 5 executed successfully.
+2025-06-24 10:10:00,218 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 10:10:00,220 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 10:10:00,221 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 10:10:00,223 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 10:10:00,236 Results for [dbo].[sp_GetLastReboot].sql exported successfully to Excel.
+2025-06-24 10:10:00,237 Block 1 executed successfully.
+2025-06-24 10:10:00,251 Error executing block 2: 'NoneType' object is not iterable
+2025-06-24 10:10:00,255 Error executing block 3: ('ODBC SQL type -16 is not yet supported.  column-index=11  type=-16', 'HY106')
+2025-06-24 10:10:00,271 Results for [dbo].[sp_SQLServiceInfo].sql exported successfully to Excel.
+2025-06-24 10:10:00,272 Block 4 executed successfully.
+2025-06-24 10:10:00,289 Results for [dbo].[sp_SQLVersionInfo].sql exported successfully to Excel.
+2025-06-24 10:10:00,290 Block 5 executed successfully.
+2025-06-24 11:17:47,366 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 11:17:47,368 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 11:17:47,369 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 11:17:47,372 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 11:17:47,391 Results for [dbo].[sp_GetLastReboot].sql exported successfully to Excel.
+2025-06-24 11:17:47,392 Block 1 executed successfully.
+2025-06-24 11:17:47,405 Error executing block 2: 'NoneType' object is not iterable
+2025-06-24 11:17:47,417 Error executing block 3: 'NoneType' object is not iterable
+2025-06-24 11:17:47,438 Results for [dbo].[sp_SQLServiceInfo].sql exported successfully to Excel.
+2025-06-24 11:17:47,440 Block 4 executed successfully.
+2025-06-24 11:17:47,465 Results for [dbo].[sp_SQLVersionInfo].sql exported successfully to Excel.
+2025-06-24 11:17:47,466 Block 5 executed successfully.
+2025-06-24 11:18:13,923 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 11:18:13,925 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 11:18:13,926 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 11:18:13,929 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 11:18:13,938 Results for [dbo].[sp_GetLastReboot].sql exported successfully to Excel.
+2025-06-24 11:18:13,939 Block 1 executed successfully.
+2025-06-24 11:18:13,954 Error executing block 2: 'NoneType' object is not iterable
+2025-06-24 11:18:13,961 Error executing block 3: 'NoneType' object is not iterable
+2025-06-24 11:18:13,977 Results for [dbo].[sp_SQLServiceInfo].sql exported successfully to Excel.
+2025-06-24 11:18:13,979 Block 4 executed successfully.
+2025-06-24 11:18:13,996 Results for [dbo].[sp_SQLVersionInfo].sql exported successfully to Excel.
+2025-06-24 11:18:13,997 Block 5 executed successfully.
+2025-06-24 11:20:00,553 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 11:20:00,555 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 11:20:00,557 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 11:20:00,559 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 11:20:00,578 Results for [dbo].[sp_GetLastReboot].sql exported successfully to Excel.
+2025-06-24 11:20:00,580 Block 1 executed successfully.
+2025-06-24 11:20:00,593 Error executing block 2: 'NoneType' object is not iterable
+2025-06-24 11:20:00,605 Error executing block 3: 'NoneType' object is not iterable
+2025-06-24 11:20:00,624 Results for [dbo].[sp_SQLServiceInfo].sql exported successfully to Excel.
+2025-06-24 11:20:00,626 Block 4 executed successfully.
+2025-06-24 11:20:00,649 Results for [dbo].[sp_SQLVersionInfo].sql exported successfully to Excel.
+2025-06-24 11:20:00,650 Block 5 executed successfully.
+2025-06-24 11:21:26,172 The script [dbo].[sp_GetLastReboot].sql was executed successfully.
+2025-06-24 11:21:26,174 The script [dbo].[sp_SQLServerProperty].sql was executed successfully.
+2025-06-24 11:21:26,175 The script [dbo].[sp_SQLServiceInfo].sql was executed successfully.
+2025-06-24 11:21:26,177 The script [dbo].[sp_SQLVersionInfo].sql was executed successfully.
+2025-06-24 11:21:26,191 Results for [dbo].[sp_GetLastReboot].sql exported successfully to Excel.
+2025-06-24 11:21:26,193 Block 1 executed successfully.
+2025-06-24 11:21:26,205 Error executing block 2: 'NoneType' object is not iterable
+2025-06-24 11:21:26,212 Error executing block 3: 'NoneType' object is not iterable
+2025-06-24 11:21:26,230 Results for [dbo].[sp_SQLServiceInfo].sql exported successfully to Excel.
+2025-06-24 11:21:26,232 Block 4 executed successfully.
+2025-06-24 11:21:26,250 Results for [dbo].[sp_SQLVersionInfo].sql exported successfully to Excel.
+2025-06-24 11:21:26,251 Block 5 executed successfully.
