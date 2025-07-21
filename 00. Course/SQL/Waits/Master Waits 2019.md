@@ -2134,4 +2134,3 @@ If you notice very high CPU usage and cannot directly correlate the high CPU usa
 Another great tool to diagnose spinlock contention is Extended Events. By using Extended Events you can trace various spinlock-related events, like spinlock backoffs there is a free Microsoft whitepaper available on spinlock contention that can give you a few pointers for what to do when dealing with spinlock contention. You can get the whitepaper at 
 
   www.microsoft.com/en-us/download/details.aspx?id=26666 
-
