@@ -66,4 +66,13 @@ https://www.pinterest.com/pin/91479436173656451/
 -------------------------------------------------------------------------------------------------------------------------
 
 - 10/02/2025
-  - 
+
+- 9/6/2025
+1. a
+2. That is not rigth at all
+3. I think we are /wir/ drifting of the point avit.
+4. Rigth, lets move on, shald we?
+5. Can you explain what you mind by that?
+6. Could I caming here please? ... 
+7. Let get donw to bussness, shlad we?
+8. What;s your opinion on this?

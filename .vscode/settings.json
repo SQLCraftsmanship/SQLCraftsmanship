@@ -1,0 +1,21 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 15,
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true,
+                "trustServerCertificate": true
+            },
+            "previewLimit": 50,
+            "server": "localhost\\SQL2022DEV",
+            "port": 1433,
+            "askForPassword": true,
+            "driver": "MSSQL",
+            "name": "DEV2022",
+            "database": "StackOverflow2013",
+            "username": "sa"
+        }
+    ]
+}

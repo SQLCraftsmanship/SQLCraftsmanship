@@ -276,3 +276,20 @@ Ingles Jesus
 	is stragithforward
 	Wizard t omigrate the table
 	
+24/05
+
+	/i/ vs /i:/
+
+	I will sit with him for a bit.
+	
+	cuando no tengo el color suena "T"
+
+	biscuit /biskit/
+	great wase /greit is/
+	said /sed/
+
+31/05
+	something //
+
+7/6
+	
