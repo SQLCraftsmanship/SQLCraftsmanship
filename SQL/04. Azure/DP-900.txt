@@ -1,0 +1,92 @@
+
+DP-900
+
+1. Videos
+	https://www.youtube.com/watch?v=0gtpasITVnk
+	https://www.youtube.com/watch?v=P3qmqUZJ7l0
+	https://www.youtube.com/watch?v=B-uJSTqHido&list=PLWsnB2XBNJzIQgY69bOONUyn2Vh85BmZu
+	
+2. Microsoft Page
+	https://learn.microsoft.com/en-us/credentials/certifications/azure-data-fundamentals/?practice-assessment-type=certification
+	
+3. Azure Page
+	https://azure.microsoft.com/es-mx/free/search/?ef_id=_k_CjwKCAjwtqmwBhBVEiwAL-WAYfjphpMbKDwl45VepRsvlmidRVjztEHKw5R_C1MNFNcj7LNy5IIrqRoCArUQAvD_BwE_k_&OCID=AIDcmm8iiz2htt_SEM__k_CjwKCAjwtqmwBhBVEiwAL-WAYfjphpMbKDwl45VepRsvlmidRVjztEHKw5R_C1MNFNcj7LNy5IIrqRoCArUQAvD_BwE_k_&gad_source=1&gclid=CjwKCAjwtqmwBhBVEiwAL-WAYfjphpMbKDwl45VepRsvlmidRVjztEHKw5R_C1MNFNcj7LNy5IIrqRoCArUQAvD_BwE
+	
+
+	Que es ARM?
+		That is the restful MPR API
+	
+	Control Plane
+		Resource based access control
+		
+	DAta Plane
+	
+	Que tengas permisos a nivel de Control Plane no significa que tengas permisos para trabajar a nivel de Data Plane
+	
+	Que es Evergreen?
+	
+	
+	DATA
+		
+		1. Structured
+			
+			1.1 Relational DB, with schemas, tables, Normalized, etc 
+				
+				OLTP	--> SQL, PostgreSQL, MariaDB, etc
+				
+				OLAP	--> sYNAPSE
+				
+			1.2 Columnar. Stored as columns
+		
+		2. Semi-Structured
+			Loose or no schemas
+			
+			2.1 XML
+			2.2 JSON
+			2.3 Document with self decribing and key (partition key)
+			
+		3. Unstructure
+			
+			We need a Storage Account to work with BLOB. BLOB is a service from Storage account.
+				
+				BLOB --> Pictures, Images, Videos, PDF, etc
+				
+					 --> WE have different types of BLOB
+							--> Block
+							--> Page
+							--> Append
+				
+				FILES --> is another service from Storage Account
+			
+				TABLE --> is another service from Storage Account
+				
+				QUEUE --> is another service from Storage Account
+	
+			Each Storage Account has 3 copies
+				LRS (Local  Redundancy Storage) --> 3 in a Data Center
+				ZRS (Zone   Redundancy Storage) --> 3 over 3 Regions
+				GRS (Global Redundancy Storage) --> 3 in a Data Center ASYNC with another 3 copies in a pair Regions
+				GZRS () 						--> 3 over 3 Regions ASYNC with another 3 copies in a pair Regions
+			
+			
+			PERFORMANCE
+			
+			|				|		Premium --> We have BLOB premium, Files premium, etc
+			|				|	
+			|				|		Standar	--> HOT
+			UP				DOWN				COOL
+			|				|					ARCHIVE(OFFLINE)
+			|				|	
+			Transaction  Capacity	
+			
+			We can define a LIFECYCLE
+				If we dont use the data for 30 days move to Cool, is not use for 90 days move to Archive, is not use for 7 years Delete
+			
+			
+		4. Graph
+			Nodes related
+			
+		5. Key Value
+			
+		6. Time Series
+			

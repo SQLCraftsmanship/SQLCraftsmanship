@@ -7672,7 +7672,7 @@ Because query optimization can be complex and time-consuming, SQL Server frequen
       ```
 
       > [!TIP]
-      - <b>Please see the summary of this point
+      - <b>Please see the summary of this point</b>
 
       ```sql
       CREATE OR ALTER PROCEDURE dbo.List_orders_8 
@@ -8928,39 +8928,19 @@ Because query optimization can be complex and time-consuming, SQL Server frequen
       This query only returns the two rows for the child queries, but the parent statement in the stored procedure does not apper. This is because this statement is never executed directly, and therefore it does not assemble any statistics. Only the child queries have execution statistics.
 
 
+\
+&nbsp;
+\
+&nbsp;
+\
+&nbsp;
 
----
+- **Logical Query Process**
 
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
-\
-&nbsp;
+  ![alt text](image/logical-query-process.jpg)
+
+  ![alt text](image/logical-query-process2.jpg)
+
 \
 &nbsp;
 \
