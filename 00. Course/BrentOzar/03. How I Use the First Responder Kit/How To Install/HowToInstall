@@ -1,8 +1,0 @@
-From GitHub
-https://github.com/BrentOzarULTD/SQL-Server-First-Responder-Kit
-
-From PowerShell
-Install-Module dbatools
-
-$cred = 'SA'
-Install-DbaFirstResponderKit -SqlInstance MSSQLSERVER -Database master -SqlCredential $cred -Force -Verbose
